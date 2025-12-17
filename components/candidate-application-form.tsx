@@ -1,14 +1,26 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { StepOne } from "./form-steps/step-one"
 import { StepTwo } from "./form-steps/step-two"
 import { StepThree } from "./form-steps/step-three"
-import { ChevronLeft, ChevronRight, Upload, User, Briefcase, CheckCircle } from "lucide-react"
+import { StepFour } from "./form-steps/step-four"
+import { ChevronLeft, ChevronRight, Upload, User, Briefcase, CheckCircle, History } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+
+export type WorkExperience = {
+  companyName: string
+  role: string
+  startMonth: string
+  startYear: string
+  endMonth: string
+  endYear: string
+  description: string
+  isCurrent: boolean
+}
 
 export type FormData = {
   // Step 1 - CV Upload & Basic Info
@@ -29,12 +41,14 @@ export type FormData = {
   preferredLocation: string
   skills: string
   experience: string
-  workHistory: string
   education: string
   expectedSalaryCurrency: string
   expectedSalaryRange: string
 
-  // Step 3 - Preferences & Additional Info
+  // Step 3 - Work History (Multiple Experiences)
+  workExperiences: WorkExperience[]
+
+  // Step 4 - Preferences & Additional Info
   linkedinProfile: string
   portfolio: string
   preferredRole: string
@@ -49,7 +63,8 @@ export type FormData = {
 const STEPS = [
   { number: 1, title: "Upload CV & Basic Info", icon: Upload },
   { number: 2, title: "Professional Details", icon: User },
-  { number: 3, title: "Preferences & Additional", icon: Briefcase },
+  { number: 3, title: "Work History", icon: History },
+  { number: 4, title: "Preferences & Additional", icon: Briefcase },
 ]
 
 export default function CandidateApplicationForm() {
@@ -72,10 +87,10 @@ export default function CandidateApplicationForm() {
     preferredLocation: "",
     skills: "",
     experience: "",
-    workHistory: "",
     education: "",
     expectedSalaryCurrency: "",
     expectedSalaryRange: "",
+    workExperiences: [],
     linkedinProfile: "",
     portfolio: "",
     preferredRole: "",
@@ -91,6 +106,27 @@ export default function CandidateApplicationForm() {
   const updateFormData = (data: Partial<FormData>) => {
     setFormData((prev) => ({ ...prev, ...data }))
   }
+
+  // Validate required fields for each step
+  const getMissingFields = (step: number): Set<string> => {
+    const missing = new Set<string>()
+    
+    if (step === 1) {
+      if (!formData.cv) missing.add("cv")
+      if (!formData.name.trim()) missing.add("name")
+      if (!formData.mobileNumber.trim()) missing.add("mobileNumber")
+      if (!formData.email.trim()) missing.add("email")
+      if (!formData.currentLocation.trim()) missing.add("currentLocation")
+      if (!formData.currentSalaryCurrency) missing.add("currentSalaryCurrency")
+      if (!formData.salaryRange) missing.add("salaryRange")
+      if (!formData.nationality.trim()) missing.add("nationality")
+      if (!formData.gender) missing.add("gender")
+    }
+    
+    return missing
+  }
+
+  const missingFields = useMemo(() => getMissingFields(currentStep), [currentStep, formData])
 
   const progress = (currentStep / STEPS.length) * 100
 
@@ -126,8 +162,8 @@ export default function CandidateApplicationForm() {
       formDataToSubmit.append("preferredLocation", formData.preferredLocation)
       formDataToSubmit.append("skills", formData.skills)
       formDataToSubmit.append("experience", formData.experience)
-      formDataToSubmit.append("workHistory", formData.workHistory)
       formDataToSubmit.append("education", formData.education)
+      formDataToSubmit.append("workExperiences", JSON.stringify(formData.workExperiences))
       formDataToSubmit.append("expectedSalaryCurrency", formData.expectedSalaryCurrency)
       formDataToSubmit.append("expectedSalaryRange", formData.expectedSalaryRange)
       formDataToSubmit.append("linkedinProfile", formData.linkedinProfile)
@@ -214,10 +250,10 @@ export default function CandidateApplicationForm() {
                   preferredLocation: "",
                   skills: "",
                   experience: "",
-                  workHistory: "",
                   education: "",
                   expectedSalaryCurrency: "",
                   expectedSalaryRange: "",
+                  workExperiences: [],
                   linkedinProfile: "",
                   portfolio: "",
                   preferredRole: "",
@@ -244,7 +280,7 @@ export default function CandidateApplicationForm() {
     <div className="mx-auto max-w-4xl">
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold text-foreground mb-2 text-balance">Join Our Team</h1>
-        <p className="text-muted-foreground text-lg">Complete your application in just 3 simple steps</p>
+        <p className="text-muted-foreground text-lg">Complete your application in just 4 simple steps</p>
       </div>
 
       {/* Progress Bar */}
@@ -290,13 +326,15 @@ export default function CandidateApplicationForm() {
           <CardDescription>
             {currentStep === 1 && "Start by uploading your CV and providing basic information"}
             {currentStep === 2 && "Tell us about your professional background"}
-            {currentStep === 3 && "Share your preferences and additional details"}
+            {currentStep === 3 && "Add your work experience history"}
+            {currentStep === 4 && "Share your preferences and additional details"}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {currentStep === 1 && <StepOne formData={formData} updateFormData={updateFormData} />}
+          {currentStep === 1 && <StepOne formData={formData} updateFormData={updateFormData} missingFields={missingFields} />}
           {currentStep === 2 && <StepTwo formData={formData} updateFormData={updateFormData} />}
           {currentStep === 3 && <StepThree formData={formData} updateFormData={updateFormData} />}
+          {currentStep === 4 && <StepFour formData={formData} updateFormData={updateFormData} />}
 
           {/* Navigation Buttons */}
           <div className="flex justify-between mt-8 pt-6 border-t">

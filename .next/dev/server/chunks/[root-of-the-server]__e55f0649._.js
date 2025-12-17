@@ -198,7 +198,6 @@ async function POST(request) {
             getRequiredValue("preferredLocation", "Preferred Location");
             getRequiredValue("skills", "Skills");
             getRequiredValue("experience", "Experience");
-            getRequiredValue("workHistory", "Work History");
             getRequiredValue("education", "Education");
             getRequiredValue("expectedSalaryCurrency", "Expected Salary Currency");
             getRequiredValue("expectedSalaryRange", "Expected Salary Range");
@@ -229,7 +228,6 @@ async function POST(request) {
             preferred_location: getRequiredValue("preferredLocation", "Preferred Location"),
             skills: getRequiredValue("skills", "Skills"),
             experience: getRequiredValue("experience", "Experience"),
-            work_history: getRequiredValue("workHistory", "Work History"),
             education: getRequiredValue("education", "Education"),
             expected_salary_currency: getRequiredValue("expectedSalaryCurrency", "Expected Salary Currency"),
             expected_salary_range: getRequiredValue("expectedSalaryRange", "Expected Salary Range"),
@@ -300,6 +298,35 @@ async function POST(request) {
             }, {
                 status: 500
             });
+        }
+        // Parse and insert work experiences
+        const workExperiencesJson = formData.get("workExperiences");
+        if (workExperiencesJson) {
+            try {
+                const workExperiences = JSON.parse(workExperiencesJson);
+                if (workExperiences.length > 0 && data?.id) {
+                    const experiencesToInsert = workExperiences.map((exp)=>({
+                            candidate_id: data.id,
+                            company_name: exp.companyName,
+                            role: exp.role,
+                            start_month: exp.startMonth,
+                            start_year: exp.startYear,
+                            end_month: exp.isCurrent ? null : exp.endMonth,
+                            end_year: exp.isCurrent ? null : exp.endYear,
+                            description: exp.description || null,
+                            is_current: exp.isCurrent
+                        }));
+                    const { error: expError } = await supabase.from("work_experiences").insert(experiencesToInsert);
+                    if (expError) {
+                        console.error("[v0] Work experiences insert error:", expError);
+                    // Don't fail the whole submission if work experiences fail
+                    // Just log the error
+                    }
+                }
+            } catch (parseError) {
+                console.error("[v0] Failed to parse work experiences:", parseError);
+            // Don't fail the whole submission
+            }
         }
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,

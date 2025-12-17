@@ -6,6 +6,57 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { FormData } from "../candidate-application-form"
 
+const SALARY_RANGE_OPTIONS: Record<string, { label: string; value: string }[]> = {
+  USD: [
+    { label: "Under 50k USD", value: "0-50k USD" },
+    { label: "50k - 100k USD", value: "50k-100k USD" },
+    { label: "100k - 150k USD", value: "100k-150k USD" },
+    { label: "150k - 200k USD", value: "150k-200k USD" },
+    { label: "200k+ USD", value: "200k+ USD" },
+  ],
+  EUR: [
+    { label: "Under 40k EUR", value: "0-40k EUR" },
+    { label: "40k - 70k EUR", value: "40k-70k EUR" },
+    { label: "70k - 100k EUR", value: "70k-100k EUR" },
+    { label: "100k - 140k EUR", value: "100k-140k EUR" },
+    { label: "140k+ EUR", value: "140k+ EUR" },
+  ],
+  GBP: [
+    { label: "Under 30k GBP", value: "0-30k GBP" },
+    { label: "30k - 60k GBP", value: "30k-60k GBP" },
+    { label: "60k - 90k GBP", value: "60k-90k GBP" },
+    { label: "90k - 120k GBP", value: "90k-120k GBP" },
+    { label: "120k+ GBP", value: "120k+ GBP" },
+  ],
+  INR: [
+    { label: "Under 5 LPA", value: "0-5 LPA" },
+    { label: "5 - 10 LPA", value: "5-10 LPA" },
+    { label: "10 - 20 LPA", value: "10-20 LPA" },
+    { label: "20 - 40 LPA", value: "20-40 LPA" },
+    { label: "40+ LPA", value: "40+ LPA" },
+  ],
+  AUD: [
+    { label: "Under 70k AUD", value: "0-70k AUD" },
+    { label: "70k - 100k AUD", value: "70k-100k AUD" },
+    { label: "100k - 140k AUD", value: "100k-140k AUD" },
+    { label: "140k - 180k AUD", value: "140k-180k AUD" },
+    { label: "180k+ AUD", value: "180k+ AUD" },
+  ],
+  CAD: [
+    { label: "Under 60k CAD", value: "0-60k CAD" },
+    { label: "60k - 90k CAD", value: "60k-90k CAD" },
+    { label: "90k - 130k CAD", value: "90k-130k CAD" },
+    { label: "130k - 170k CAD", value: "130k-170k CAD" },
+    { label: "170k+ CAD", value: "170k+ CAD" },
+  ],
+  DEFAULT: [
+    { label: "Entry", value: "Entry" },
+    { label: "Mid", value: "Mid" },
+    { label: "Senior", value: "Senior" },
+    { label: "Lead", value: "Lead" },
+  ],
+}
+
 type StepTwoProps = {
   formData: FormData
   updateFormData: (data: Partial<FormData>) => void
@@ -90,20 +141,6 @@ export function StepTwo({ formData, updateFormData }: StepTwoProps) {
         />
       </div>
 
-      {/* Work History */}
-      <div className="space-y-2">
-        <Label htmlFor="workHistory" className="text-base">
-          Work History <span className="text-destructive">*</span>
-        </Label>
-        <Textarea
-          id="workHistory"
-          placeholder="Brief overview of your work experience (companies, roles, duration)"
-          value={formData.workHistory}
-          onChange={(e) => updateFormData({ workHistory: e.target.value })}
-          rows={5}
-        />
-      </div>
-
       {/* Education */}
       <div className="space-y-2">
         <Label htmlFor="education" className="text-base">
@@ -126,7 +163,7 @@ export function StepTwo({ formData, updateFormData }: StepTwoProps) {
           </Label>
           <Select
             value={formData.expectedSalaryCurrency}
-            onValueChange={(value) => updateFormData({ expectedSalaryCurrency: value })}
+            onValueChange={(value) => updateFormData({ expectedSalaryCurrency: value, expectedSalaryRange: "" })}
           >
             <SelectTrigger id="expectedSalaryCurrency">
               <SelectValue placeholder="Select currency" />
@@ -151,14 +188,19 @@ export function StepTwo({ formData, updateFormData }: StepTwoProps) {
             onValueChange={(value) => updateFormData({ expectedSalaryRange: value })}
           >
             <SelectTrigger id="expectedSalaryRange">
-              <SelectValue placeholder="Select range" />
+              <SelectValue
+                placeholder={
+                  (SALARY_RANGE_OPTIONS[formData.expectedSalaryCurrency] ||
+                    SALARY_RANGE_OPTIONS.DEFAULT)[0]?.label ?? "Select range"
+                }
+              />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="0-25">0 - 25 LPA</SelectItem>
-              <SelectItem value="25-50">25 - 50 LPA</SelectItem>
-              <SelectItem value="50-75">50 - 75 LPA</SelectItem>
-              <SelectItem value="75-100">75 - 100 LPA</SelectItem>
-              <SelectItem value="100+">100+ LPA</SelectItem>
+              {(SALARY_RANGE_OPTIONS[formData.expectedSalaryCurrency] || SALARY_RANGE_OPTIONS.DEFAULT).map((range) => (
+                <SelectItem key={range.value} value={range.value}>
+                  {range.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

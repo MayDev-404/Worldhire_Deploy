@@ -23,7 +23,6 @@ export type Candidate = {
   preferred_location?: string
   skills?: string
   experience?: string
-  work_history?: string
   education?: string
   expected_salary_currency?: string
   expected_salary_range?: string

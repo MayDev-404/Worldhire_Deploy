@@ -119,7 +119,6 @@ export async function POST(request: NextRequest) {
       getRequiredValue("preferredLocation", "Preferred Location")
       getRequiredValue("skills", "Skills")
       getRequiredValue("experience", "Experience")
-      getRequiredValue("workHistory", "Work History")
       getRequiredValue("education", "Education")
       getRequiredValue("expectedSalaryCurrency", "Expected Salary Currency")
       getRequiredValue("expectedSalaryRange", "Expected Salary Range")
@@ -150,7 +149,6 @@ export async function POST(request: NextRequest) {
       preferred_location: getRequiredValue("preferredLocation", "Preferred Location"),
       skills: getRequiredValue("skills", "Skills"),
       experience: getRequiredValue("experience", "Experience"),
-      work_history: getRequiredValue("workHistory", "Work History"),
       education: getRequiredValue("education", "Education"),
       expected_salary_currency: getRequiredValue("expectedSalaryCurrency", "Expected Salary Currency"),
       expected_salary_range: getRequiredValue("expectedSalaryRange", "Expected Salary Range"),
@@ -227,6 +225,50 @@ export async function POST(request: NextRequest) {
         }, 
         { status: 500 }
       )
+    }
+
+    // Parse and insert work experiences
+    const workExperiencesJson = formData.get("workExperiences") as string
+    if (workExperiencesJson) {
+      try {
+        const workExperiences = JSON.parse(workExperiencesJson) as Array<{
+          companyName: string
+          role: string
+          startMonth: string
+          startYear: string
+          endMonth: string
+          endYear: string
+          description: string
+          isCurrent: boolean
+        }>
+
+        if (workExperiences.length > 0 && data?.id) {
+          const experiencesToInsert = workExperiences.map((exp) => ({
+            candidate_id: data.id,
+            company_name: exp.companyName,
+            role: exp.role,
+            start_month: exp.startMonth,
+            start_year: exp.startYear,
+            end_month: exp.isCurrent ? null : exp.endMonth,
+            end_year: exp.isCurrent ? null : exp.endYear,
+            description: exp.description || null,
+            is_current: exp.isCurrent,
+          }))
+
+          const { error: expError } = await supabase
+            .from("work_experiences")
+            .insert(experiencesToInsert)
+
+          if (expError) {
+            console.error("[v0] Work experiences insert error:", expError)
+            // Don't fail the whole submission if work experiences fail
+            // Just log the error
+          }
+        }
+      } catch (parseError) {
+        console.error("[v0] Failed to parse work experiences:", parseError)
+        // Don't fail the whole submission
+      }
     }
 
     return NextResponse.json({ success: true, candidate: data }, { status: 200 })

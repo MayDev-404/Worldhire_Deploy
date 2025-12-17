@@ -4,194 +4,251 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import type { FormData } from "../candidate-application-form"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import type { FormData, WorkExperience } from "../candidate-application-form"
+import { Plus, Trash2 } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
 
 type StepThreeProps = {
   formData: FormData
   updateFormData: (data: Partial<FormData>) => void
 }
 
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+]
+
+const CURRENT_YEAR = new Date().getFullYear()
+const YEARS = Array.from({ length: 50 }, (_, i) => CURRENT_YEAR - i)
+
+const createEmptyExperience = (): WorkExperience => ({
+  companyName: "",
+  role: "",
+  startMonth: "",
+  startYear: "",
+  endMonth: "",
+  endYear: "",
+  description: "",
+  isCurrent: false,
+})
+
 export function StepThree({ formData, updateFormData }: StepThreeProps) {
+  const workExperiences = formData.workExperiences || []
+
+  const addExperience = () => {
+    const newExperiences = [...workExperiences, createEmptyExperience()]
+    updateFormData({ workExperiences: newExperiences })
+  }
+
+  const removeExperience = (index: number) => {
+    const newExperiences = workExperiences.filter((_, i) => i !== index)
+    updateFormData({ workExperiences: newExperiences })
+  }
+
+  const updateExperience = (index: number, field: keyof WorkExperience, value: string | boolean) => {
+    const newExperiences = [...workExperiences]
+    newExperiences[index] = { ...newExperiences[index], [field]: value }
+    
+    // If "isCurrent" is checked, clear end date
+    if (field === "isCurrent" && value === true) {
+      newExperiences[index].endMonth = ""
+      newExperiences[index].endYear = ""
+    }
+    
+    updateFormData({ workExperiences: newExperiences })
+  }
+
   return (
     <div className="space-y-6">
-      {/* LinkedIn Profile */}
-      <div className="space-y-2">
-        <Label htmlFor="linkedinProfile" className="text-base">
-          LinkedIn Profile
-        </Label>
-        <Input
-          id="linkedinProfile"
-          type="url"
-          placeholder="https://linkedin.com/in/yourprofile"
-          value={formData.linkedinProfile}
-          onChange={(e) => updateFormData({ linkedinProfile: e.target.value })}
-        />
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-lg font-semibold">Work Experience</h3>
+          <p className="text-sm text-muted-foreground">Add your work history, starting with your most recent position</p>
+        </div>
+        <Button type="button" onClick={addExperience} variant="outline" className="gap-2">
+          <Plus className="h-4 w-4" />
+          Add Experience
+        </Button>
       </div>
 
-      {/* Portfolio */}
-      <div className="space-y-2">
-        <Label htmlFor="portfolio" className="text-base">
-          Portfolio / Work Showcase
-        </Label>
-        <Textarea
-          id="portfolio"
-          placeholder="Links to your portfolio, GitHub, Behance, or any showcase of previous work"
-          value={formData.portfolio}
-          onChange={(e) => updateFormData({ portfolio: e.target.value })}
-          rows={3}
-        />
-      </div>
+      {workExperiences.length === 0 ? (
+        <Card className="border-dashed">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <p className="text-muted-foreground mb-4">No work experience added yet</p>
+            <Button type="button" onClick={addExperience} variant="outline" className="gap-2">
+              <Plus className="h-4 w-4" />
+              Add Your First Experience
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-6">
+          {workExperiences.map((experience, index) => (
+            <Card key={index} className="border-2">
+              <CardContent className="pt-6 space-y-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold text-base">Experience #{index + 1}</h4>
+                  <Button
+                    type="button"
+                    onClick={() => removeExperience(index)}
+                    variant="ghost"
+                    size="icon"
+                    className="text-destructive hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
 
-      {/* Preferred Role */}
-      <div className="space-y-2">
-        <Label htmlFor="preferredRole" className="text-base">
-          Preferred Role
-        </Label>
-        <Input
-          id="preferredRole"
-          placeholder="e.g., Frontend Developer, Product Manager, Data Analyst"
-          value={formData.preferredRole}
-          onChange={(e) => updateFormData({ preferredRole: e.target.value })}
-        />
-      </div>
+                {/* Company Name */}
+                <div className="space-y-2">
+                  <Label htmlFor={`company-${index}`} className="text-base">
+                    Company Name <span className="text-destructive">*</span>
+                  </Label>
+                  <Input
+                    id={`company-${index}`}
+                    placeholder="e.g., Google, Microsoft, ABC Corp"
+                    value={experience.companyName}
+                    onChange={(e) => updateExperience(index, "companyName", e.target.value)}
+                  />
+                </div>
 
-      {/* Work Permit Status */}
-      <div className="space-y-2">
-        <Label htmlFor="workPermitStatus" className="text-base">
-          Work Permit Status
-        </Label>
-        <Select
-          value={formData.workPermitStatus}
-          onValueChange={(value) => updateFormData({ workPermitStatus: value })}
-        >
-          <SelectTrigger id="workPermitStatus">
-            <SelectValue placeholder="Nationality basis" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Nationality basis">Nationality basis</SelectItem>
-            <SelectItem value="Work Permit Holder">Work Permit Holder</SelectItem>
-            <SelectItem value="Citizen">Citizen</SelectItem>
-            <SelectItem value="Permanent Resident">Permanent Resident</SelectItem>
-            <SelectItem value="Visa Sponsorship Required">Visa Sponsorship Required</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+                {/* Role */}
+                <div className="space-y-2">
+                  <Label htmlFor={`role-${index}`} className="text-base">
+                    Role / Job Title <span className="text-destructive">*</span>
+                  </Label>
+                  <Input
+                    id={`role-${index}`}
+                    placeholder="e.g., Software Engineer, Product Manager"
+                    value={experience.role}
+                    onChange={(e) => updateExperience(index, "role", e.target.value)}
+                  />
+                </div>
 
-      {/* Employment Type */}
-      <div className="space-y-2">
-        <Label htmlFor="employmentType" className="text-base">
-          Employment Type
-        </Label>
-        <Select value={formData.employmentType} onValueChange={(value) => updateFormData({ employmentType: value })}>
-          <SelectTrigger id="employmentType">
-            <SelectValue placeholder="Permanent" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Permanent">Permanent</SelectItem>
-            <SelectItem value="Contract">Contract</SelectItem>
-            <SelectItem value="Temporary">Temporary</SelectItem>
-            <SelectItem value="Freelance">Freelance</SelectItem>
-            <SelectItem value="Internship">Internship</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+                {/* Start Date */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor={`startMonth-${index}`} className="text-base">
+                      Start Month <span className="text-destructive">*</span>
+                    </Label>
+                    <Select
+                      value={experience.startMonth}
+                      onValueChange={(value) => updateExperience(index, "startMonth", value)}
+                    >
+                      <SelectTrigger id={`startMonth-${index}`}>
+                        <SelectValue placeholder="Select month" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {MONTHS.map((month) => (
+                          <SelectItem key={month} value={month}>
+                            {month}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-      {/* Work Mode (WFH/WFO/Hybrid) */}
-      <div className="space-y-3">
-        <Label className="text-base">
-          Work Mode Preference <span className="text-destructive">*</span>
-        </Label>
-        <RadioGroup
-          value={formData.workMode}
-          onValueChange={(value) => updateFormData({ workMode: value })}
-          className="flex flex-col space-y-2"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="WFH" id="wfh" />
-            <Label htmlFor="wfh" className="font-normal cursor-pointer">
-              Work From Home (WFH)
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="WFO" id="wfo" />
-            <Label htmlFor="wfo" className="font-normal cursor-pointer">
-              Work From Office (WFO)
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="Hybrid" id="hybrid" />
-            <Label htmlFor="hybrid" className="font-normal cursor-pointer">
-              Hybrid
-            </Label>
-          </div>
-        </RadioGroup>
-      </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`startYear-${index}`} className="text-base">
+                      Start Year <span className="text-destructive">*</span>
+                    </Label>
+                    <Select
+                      value={experience.startYear}
+                      onValueChange={(value) => updateExperience(index, "startYear", value)}
+                    >
+                      <SelectTrigger id={`startYear-${index}`}>
+                        <SelectValue placeholder="Select year" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {YEARS.map((year) => (
+                          <SelectItem key={year} value={year.toString()}>
+                            {year}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
 
-      {/* References */}
-      <div className="space-y-2">
-        <Label htmlFor="references" className="text-base">
-          References
-        </Label>
-        <Textarea
-          id="references"
-          placeholder="Provide contact information for professional references"
-          value={formData.references}
-          onChange={(e) => updateFormData({ references: e.target.value })}
-          rows={3}
-        />
-      </div>
+                {/* Current Job Checkbox */}
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id={`current-${index}`}
+                    checked={experience.isCurrent}
+                    onCheckedChange={(checked) => updateExperience(index, "isCurrent", checked === true)}
+                  />
+                  <Label htmlFor={`current-${index}`} className="text-sm font-normal cursor-pointer">
+                    I currently work here
+                  </Label>
+                </div>
 
-      {/* Notice Period */}
-      <div className="space-y-2">
-        <Label htmlFor="noticePeriod" className="text-base">
-          Notice Period <span className="text-destructive">*</span>
-        </Label>
-        <Select value={formData.noticePeriod} onValueChange={(value) => updateFormData({ noticePeriod: value })}>
-          <SelectTrigger id="noticePeriod">
-            <SelectValue placeholder="Select notice period" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Immediate">Immediate</SelectItem>
-            <SelectItem value="1 week">1 week</SelectItem>
-            <SelectItem value="2 weeks">2 weeks</SelectItem>
-            <SelectItem value="1 month">1 month</SelectItem>
-            <SelectItem value="2 months">2 months</SelectItem>
-            <SelectItem value="3 months">3 months</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+                {/* End Date */}
+                {!experience.isCurrent && (
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor={`endMonth-${index}`} className="text-base">
+                        End Month <span className="text-destructive">*</span>
+                      </Label>
+                      <Select
+                        value={experience.endMonth}
+                        onValueChange={(value) => updateExperience(index, "endMonth", value)}
+                      >
+                        <SelectTrigger id={`endMonth-${index}`}>
+                          <SelectValue placeholder="Select month" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {MONTHS.map((month) => (
+                            <SelectItem key={month} value={month}>
+                              {month}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-      {/* Actively Seeking Toggle */}
-      <div className="space-y-3">
-        <Label className="text-base">
-          Job Search Status <span className="text-destructive">*</span>
-        </Label>
-        <RadioGroup
-          value={formData.activelySeekingToggle}
-          onValueChange={(value) => updateFormData({ activelySeekingToggle: value })}
-          className="flex flex-col space-y-2"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="Actively Seeking" id="active" />
-            <Label htmlFor="active" className="font-normal cursor-pointer">
-              Actively Seeking
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="Passive" id="passive" />
-            <Label htmlFor="passive" className="font-normal cursor-pointer">
-              Passive (Open to opportunities)
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="Not Looking" id="not-looking" />
-            <Label htmlFor="not-looking" className="font-normal cursor-pointer">
-              Not Looking
-            </Label>
-          </div>
-        </RadioGroup>
-      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`endYear-${index}`} className="text-base">
+                        End Year <span className="text-destructive">*</span>
+                      </Label>
+                      <Select
+                        value={experience.endYear}
+                        onValueChange={(value) => updateExperience(index, "endYear", value)}
+                      >
+                        <SelectTrigger id={`endYear-${index}`}>
+                          <SelectValue placeholder="Select year" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {YEARS.map((year) => (
+                            <SelectItem key={year} value={year.toString()}>
+                              {year}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                )}
+
+                {/* Description */}
+                <div className="space-y-2">
+                  <Label htmlFor={`description-${index}`} className="text-base">
+                    Description <span className="text-muted-foreground">(Optional)</span>
+                  </Label>
+                  <Textarea
+                    id={`description-${index}`}
+                    placeholder="Describe your responsibilities, achievements, and key contributions..."
+                    value={experience.description}
+                    onChange={(e) => updateExperience(index, "description", e.target.value)}
+                    rows={4}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

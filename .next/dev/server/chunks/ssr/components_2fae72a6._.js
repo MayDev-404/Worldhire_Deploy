@@ -2335,12 +2335,12 @@ function StepTwo({ formData, updateFormData }) {
     }, this);
 }
 }),
-"[project]/components/form-steps/step-three.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"[project]/components/form-steps/step-four.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
-    "StepThree",
-    ()=>StepThree
+    "StepFour",
+    ()=>StepFour
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/input.tsx [app-ssr] (ecmascript)");
@@ -2355,7 +2355,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$radio$2d
 ;
 ;
 ;
-function StepThree({ formData, updateFormData }) {
+function StepFour({ formData, updateFormData }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "space-y-6",
         children: [
@@ -2367,7 +2367,7 @@ function StepThree({ formData, updateFormData }) {
                         className: "text-base",
                         children: "LinkedIn Profile"
                     }, void 0, false, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 20,
                         columnNumber: 9
                     }, this),
@@ -2380,13 +2380,13 @@ function StepThree({ formData, updateFormData }) {
                                 linkedinProfile: e.target.value
                             })
                     }, void 0, false, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 23,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
-                fileName: "[project]/components/form-steps/step-three.tsx",
+                fileName: "[project]/components/form-steps/step-four.tsx",
                 lineNumber: 19,
                 columnNumber: 7
             }, this),
@@ -2398,7 +2398,7 @@ function StepThree({ formData, updateFormData }) {
                         className: "text-base",
                         children: "Portfolio / Work Showcase"
                     }, void 0, false, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 34,
                         columnNumber: 9
                     }, this),
@@ -2411,13 +2411,13 @@ function StepThree({ formData, updateFormData }) {
                             }),
                         rows: 3
                     }, void 0, false, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 37,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
-                fileName: "[project]/components/form-steps/step-three.tsx",
+                fileName: "[project]/components/form-steps/step-four.tsx",
                 lineNumber: 33,
                 columnNumber: 7
             }, this),
@@ -2429,7 +2429,7 @@ function StepThree({ formData, updateFormData }) {
                         className: "text-base",
                         children: "Preferred Role"
                     }, void 0, false, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 48,
                         columnNumber: 9
                     }, this),
@@ -2441,13 +2441,13 @@ function StepThree({ formData, updateFormData }) {
                                 preferredRole: e.target.value
                             })
                     }, void 0, false, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 51,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
-                fileName: "[project]/components/form-steps/step-three.tsx",
+                fileName: "[project]/components/form-steps/step-four.tsx",
                 lineNumber: 47,
                 columnNumber: 7
             }, this),
@@ -2459,7 +2459,7 @@ function StepThree({ formData, updateFormData }) {
                         className: "text-base",
                         children: "Work Permit Status"
                     }, void 0, false, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 61,
                         columnNumber: 9
                     }, this),
@@ -2474,12 +2474,12 @@ function StepThree({ formData, updateFormData }) {
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {
                                     placeholder: "Nationality basis"
                                 }, void 0, false, {
-                                    fileName: "[project]/components/form-steps/step-three.tsx",
+                                    fileName: "[project]/components/form-steps/step-four.tsx",
                                     lineNumber: 69,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 68,
                                 columnNumber: 11
                             }, this),
@@ -2489,7 +2489,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Nationality basis",
                                         children: "Nationality basis"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 72,
                                         columnNumber: 13
                                     }, this),
@@ -2497,7 +2497,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Work Permit Holder",
                                         children: "Work Permit Holder"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 73,
                                         columnNumber: 13
                                     }, this),
@@ -2505,7 +2505,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Citizen",
                                         children: "Citizen"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 74,
                                         columnNumber: 13
                                     }, this),
@@ -2513,7 +2513,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Permanent Resident",
                                         children: "Permanent Resident"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 75,
                                         columnNumber: 13
                                     }, this),
@@ -2521,25 +2521,25 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Visa Sponsorship Required",
                                         children: "Visa Sponsorship Required"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 76,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 71,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 64,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
-                fileName: "[project]/components/form-steps/step-three.tsx",
+                fileName: "[project]/components/form-steps/step-four.tsx",
                 lineNumber: 60,
                 columnNumber: 7
             }, this),
@@ -2551,7 +2551,7 @@ function StepThree({ formData, updateFormData }) {
                         className: "text-base",
                         children: "Employment Type"
                     }, void 0, false, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 83,
                         columnNumber: 9
                     }, this),
@@ -2566,12 +2566,12 @@ function StepThree({ formData, updateFormData }) {
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {
                                     placeholder: "Permanent"
                                 }, void 0, false, {
-                                    fileName: "[project]/components/form-steps/step-three.tsx",
+                                    fileName: "[project]/components/form-steps/step-four.tsx",
                                     lineNumber: 88,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 87,
                                 columnNumber: 11
                             }, this),
@@ -2581,7 +2581,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Permanent",
                                         children: "Permanent"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 91,
                                         columnNumber: 13
                                     }, this),
@@ -2589,7 +2589,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Contract",
                                         children: "Contract"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 92,
                                         columnNumber: 13
                                     }, this),
@@ -2597,7 +2597,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Temporary",
                                         children: "Temporary"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 93,
                                         columnNumber: 13
                                     }, this),
@@ -2605,7 +2605,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Freelance",
                                         children: "Freelance"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 94,
                                         columnNumber: 13
                                     }, this),
@@ -2613,25 +2613,25 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Internship",
                                         children: "Internship"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 95,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 90,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 86,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
-                fileName: "[project]/components/form-steps/step-three.tsx",
+                fileName: "[project]/components/form-steps/step-four.tsx",
                 lineNumber: 82,
                 columnNumber: 7
             }, this),
@@ -2646,13 +2646,13 @@ function StepThree({ formData, updateFormData }) {
                                 className: "text-destructive",
                                 children: "*"
                             }, void 0, false, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 103,
                                 columnNumber: 32
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 102,
                         columnNumber: 9
                     }, this),
@@ -2670,7 +2670,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "WFH",
                                         id: "wfh"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 111,
                                         columnNumber: 13
                                     }, this),
@@ -2679,13 +2679,13 @@ function StepThree({ formData, updateFormData }) {
                                         className: "font-normal cursor-pointer",
                                         children: "Work From Home (WFH)"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 112,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 110,
                                 columnNumber: 11
                             }, this),
@@ -2696,7 +2696,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "WFO",
                                         id: "wfo"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 117,
                                         columnNumber: 13
                                     }, this),
@@ -2705,13 +2705,13 @@ function StepThree({ formData, updateFormData }) {
                                         className: "font-normal cursor-pointer",
                                         children: "Work From Office (WFO)"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 118,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 116,
                                 columnNumber: 11
                             }, this),
@@ -2722,7 +2722,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Hybrid",
                                         id: "hybrid"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 123,
                                         columnNumber: 13
                                     }, this),
@@ -2731,25 +2731,25 @@ function StepThree({ formData, updateFormData }) {
                                         className: "font-normal cursor-pointer",
                                         children: "Hybrid"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 124,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 122,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 105,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
-                fileName: "[project]/components/form-steps/step-three.tsx",
+                fileName: "[project]/components/form-steps/step-four.tsx",
                 lineNumber: 101,
                 columnNumber: 7
             }, this),
@@ -2761,7 +2761,7 @@ function StepThree({ formData, updateFormData }) {
                         className: "text-base",
                         children: "References"
                     }, void 0, false, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 133,
                         columnNumber: 9
                     }, this),
@@ -2774,13 +2774,13 @@ function StepThree({ formData, updateFormData }) {
                             }),
                         rows: 3
                     }, void 0, false, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 136,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
-                fileName: "[project]/components/form-steps/step-three.tsx",
+                fileName: "[project]/components/form-steps/step-four.tsx",
                 lineNumber: 132,
                 columnNumber: 7
             }, this),
@@ -2796,13 +2796,13 @@ function StepThree({ formData, updateFormData }) {
                                 className: "text-destructive",
                                 children: "*"
                             }, void 0, false, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 148,
                                 columnNumber: 25
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 147,
                         columnNumber: 9
                     }, this),
@@ -2817,12 +2817,12 @@ function StepThree({ formData, updateFormData }) {
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {
                                     placeholder: "Select notice period"
                                 }, void 0, false, {
-                                    fileName: "[project]/components/form-steps/step-three.tsx",
+                                    fileName: "[project]/components/form-steps/step-four.tsx",
                                     lineNumber: 152,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 151,
                                 columnNumber: 11
                             }, this),
@@ -2832,7 +2832,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Immediate",
                                         children: "Immediate"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 155,
                                         columnNumber: 13
                                     }, this),
@@ -2840,7 +2840,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "1 week",
                                         children: "1 week"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 156,
                                         columnNumber: 13
                                     }, this),
@@ -2848,7 +2848,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "2 weeks",
                                         children: "2 weeks"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 157,
                                         columnNumber: 13
                                     }, this),
@@ -2856,7 +2856,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "1 month",
                                         children: "1 month"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 158,
                                         columnNumber: 13
                                     }, this),
@@ -2864,7 +2864,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "2 months",
                                         children: "2 months"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 159,
                                         columnNumber: 13
                                     }, this),
@@ -2872,25 +2872,25 @@ function StepThree({ formData, updateFormData }) {
                                         value: "3 months",
                                         children: "3 months"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 160,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 154,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 150,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
-                fileName: "[project]/components/form-steps/step-three.tsx",
+                fileName: "[project]/components/form-steps/step-four.tsx",
                 lineNumber: 146,
                 columnNumber: 7
             }, this),
@@ -2905,13 +2905,13 @@ function StepThree({ formData, updateFormData }) {
                                 className: "text-destructive",
                                 children: "*"
                             }, void 0, false, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 168,
                                 columnNumber: 29
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 167,
                         columnNumber: 9
                     }, this),
@@ -2929,7 +2929,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Actively Seeking",
                                         id: "active"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 176,
                                         columnNumber: 13
                                     }, this),
@@ -2938,13 +2938,13 @@ function StepThree({ formData, updateFormData }) {
                                         className: "font-normal cursor-pointer",
                                         children: "Actively Seeking"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 177,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 175,
                                 columnNumber: 11
                             }, this),
@@ -2955,7 +2955,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Passive",
                                         id: "passive"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 182,
                                         columnNumber: 13
                                     }, this),
@@ -2964,13 +2964,13 @@ function StepThree({ formData, updateFormData }) {
                                         className: "font-normal cursor-pointer",
                                         children: "Passive (Open to opportunities)"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 183,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 181,
                                 columnNumber: 11
                             }, this),
@@ -2981,7 +2981,7 @@ function StepThree({ formData, updateFormData }) {
                                         value: "Not Looking",
                                         id: "not-looking"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 188,
                                         columnNumber: 13
                                     }, this),
@@ -2990,31 +2990,31 @@ function StepThree({ formData, updateFormData }) {
                                         className: "font-normal cursor-pointer",
                                         children: "Not Looking"
                                     }, void 0, false, {
-                                        fileName: "[project]/components/form-steps/step-three.tsx",
+                                        fileName: "[project]/components/form-steps/step-four.tsx",
                                         lineNumber: 189,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/components/form-steps/step-three.tsx",
+                                fileName: "[project]/components/form-steps/step-four.tsx",
                                 lineNumber: 187,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/components/form-steps/step-three.tsx",
+                        fileName: "[project]/components/form-steps/step-four.tsx",
                         lineNumber: 170,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
-                fileName: "[project]/components/form-steps/step-three.tsx",
+                fileName: "[project]/components/form-steps/step-four.tsx",
                 lineNumber: 166,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
-        fileName: "[project]/components/form-steps/step-three.tsx",
+        fileName: "[project]/components/form-steps/step-four.tsx",
         lineNumber: 17,
         columnNumber: 5
     }, this);
@@ -3034,12 +3034,12 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$progress$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/progress.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$form$2d$steps$2f$step$2d$one$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/form-steps/step-one.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$form$2d$steps$2f$step$2d$two$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/form-steps/step-two.tsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$form$2d$steps$2f$step$2d$three$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/form-steps/step-three.tsx [app-ssr] (ecmascript)");
 (()=>{
-    const e = new Error("Cannot find module './form-steps/step-four'");
+    const e = new Error("Cannot find module './form-steps/step-three'");
     e.code = 'MODULE_NOT_FOUND';
     throw e;
 })();
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$form$2d$steps$2f$step$2d$four$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/form-steps/step-four.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$left$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronLeft$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-left.js [app-ssr] (ecmascript) <export default as ChevronLeft>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-right.js [app-ssr] (ecmascript) <export default as ChevronRight>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$upload$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Upload$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/upload.js [app-ssr] (ecmascript) <export default as Upload>");
@@ -3483,7 +3483,7 @@ function CandidateApplicationForm() {
                                 lineNumber: 335,
                                 columnNumber: 33
                             }, this),
-                            currentStep === 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$form$2d$steps$2f$step$2d$three$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["StepThree"], {
+                            currentStep === 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(StepThree, {
                                 formData: formData,
                                 updateFormData: updateFormData
                             }, void 0, false, {
@@ -3491,7 +3491,7 @@ function CandidateApplicationForm() {
                                 lineNumber: 336,
                                 columnNumber: 33
                             }, this),
-                            currentStep === 4 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(StepFour, {
+                            currentStep === 4 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$form$2d$steps$2f$step$2d$four$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["StepFour"], {
                                 formData: formData,
                                 updateFormData: updateFormData
                             }, void 0, false, {
@@ -3587,4 +3587,4 @@ function CandidateApplicationForm() {
 }),
 ];
 
-//# sourceMappingURL=components_70716ab5._.js.map
+//# sourceMappingURL=components_2fae72a6._.js.map
