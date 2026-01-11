@@ -119,7 +119,6 @@ export async function POST(request: NextRequest) {
       getRequiredValue("preferredLocation", "Preferred Location")
       getRequiredValue("skills", "Skills")
       getRequiredValue("experience", "Experience")
-      getRequiredValue("education", "Education")
       getRequiredValue("expectedSalaryCurrency", "Expected Salary Currency")
       getRequiredValue("expectedSalaryRange", "Expected Salary Range")
       getRequiredValue("workMode", "Work Mode")
@@ -149,7 +148,6 @@ export async function POST(request: NextRequest) {
       preferred_location: getRequiredValue("preferredLocation", "Preferred Location"),
       skills: getRequiredValue("skills", "Skills"),
       experience: getRequiredValue("experience", "Experience"),
-      education: getRequiredValue("education", "Education"),
       expected_salary_currency: getRequiredValue("expectedSalaryCurrency", "Expected Salary Currency"),
       expected_salary_range: getRequiredValue("expectedSalaryRange", "Expected Salary Range"),
       linkedin_profile: getValue("linkedinProfile"),
@@ -267,6 +265,43 @@ export async function POST(request: NextRequest) {
         }
       } catch (parseError) {
         console.error("[v0] Failed to parse work experiences:", parseError)
+        // Don't fail the whole submission
+      }
+    }
+
+    // Parse and insert educations
+    const educationsJson = formData.get("educations") as string
+    if (educationsJson) {
+      try {
+        const educations = JSON.parse(educationsJson) as Array<{
+          degree: string
+          institute: string
+          startYear: string
+          endYear: string
+        }>
+
+        if (educations.length > 0 && data?.id) {
+          const educationsToInsert = educations.map((edu, index) => ({
+            candidate_id: data.id,
+            degree: edu.degree,
+            institute: edu.institute,
+            start_year: edu.startYear,
+            end_year: edu.endYear,
+            display_order: index,
+          }))
+
+          const { error: eduError } = await supabase
+            .from("educations")
+            .insert(educationsToInsert)
+
+          if (eduError) {
+            console.error("[v0] Educations insert error:", eduError)
+            // Don't fail the whole submission if educations fail
+            // Just log the error
+          }
+        }
+      } catch (parseError) {
+        console.error("[v0] Failed to parse educations:", parseError)
         // Don't fail the whole submission
       }
     }

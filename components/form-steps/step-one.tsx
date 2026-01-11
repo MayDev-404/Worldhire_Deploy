@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { FormData } from "../candidate-application-form"
-// import { Loader2 } from "lucide-react" // CV parsing disabled
+import { Loader2 } from "lucide-react"
 
 type StepOneProps = {
   formData: FormData
@@ -103,51 +103,60 @@ const SALARY_RANGE_OPTIONS: Record<string, { label: string; value: string }[]> =
 
 export function StepOne({ formData, updateFormData, missingFields }: StepOneProps) {
   const fieldHasError = (key: string) => missingFields.has(key)
-  // CV parsing feature disabled
-  // const [isParsingCV, setIsParsingCV] = useState(false)
+  const [isParsingCV, setIsParsingCV] = useState(false)
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, field: "cv" | "photograph") => {
     const file = e.target.files?.[0] || null
     updateFormData({ [field]: file })
 
-    // CV parsing feature commented out
-    // If CV is uploaded, parse and auto-fill
-    // if (field === "cv" && file) {
-    //   setIsParsingCV(true)
-    //   try {
-    //     const formData = new FormData()
-    //     formData.append("file", file)
+    // If CV is uploaded, parse and auto-fill using Gemma3 via Hugging Face
+    if (field === "cv" && file) {
+      setIsParsingCV(true)
+      try {
+        const formDataToSend = new FormData()
+        formDataToSend.append("file", file)
 
-    //     const response = await fetch("/api/parse-cv", {
-    //       method: "POST",
-    //       body: formData,
-    //     })
+        const response = await fetch("/api/parse-cv", {
+          method: "POST",
+          body: formDataToSend,
+        })
 
-    //     if (response.ok) {
-    //       const { data } = await response.json()
+        if (response.ok) {
+          const { data } = await response.json()
 
-    //       // Auto-fill form fields with extracted data
-    //       const updates: Partial<FormData> = {}
-    //       if (data.name) updates.name = data.name
-    //       if (data.email) updates.email = data.email
-    //       if (data.phone) updates.mobileNumber = data.phone
-    //       if (data.location) updates.currentLocation = data.location
-    //       if (data.nationality) updates.nationality = data.nationality
-    //       if (data.skills) updates.skills = data.skills
-    //       if (data.experience) updates.experience = data.experience
-    //       if (data.education) updates.education = data.education
-    //       if (data.workHistory) updates.workHistory = data.workHistory
-    //       if (data.linkedinProfile) updates.linkedinProfile = data.linkedinProfile
-    //       if (data.preferredRole) updates.preferredRole = data.preferredRole
+          // Auto-fill form fields with extracted data
+          const updates: Partial<FormData> = {}
+          if (data.name) updates.name = data.name
+          if (data.email) updates.email = data.email
+          if (data.phone) updates.mobileNumber = data.phone
+          if (data.location) updates.currentLocation = data.location
+          if (data.nationality) updates.nationality = data.nationality
+          if (data.skills) updates.skills = data.skills
+          if (data.experience) updates.experience = data.experience
+          if (data.linkedinProfile) updates.linkedinProfile = data.linkedinProfile
+          if (data.preferredRole) updates.preferredRole = data.preferredRole
+          
+          // Handle structured work experiences
+          if (data.workExperiences && Array.isArray(data.workExperiences) && data.workExperiences.length > 0) {
+            updates.workExperiences = data.workExperiences
+          }
+          
+          // Handle structured educations
+          if (data.educations && Array.isArray(data.educations) && data.educations.length > 0) {
+            updates.educations = data.educations
+          }
 
-    //       updateFormData(updates)
-    //     }
-    //   } catch (error) {
-    //     console.error("Error parsing CV:", error)
-    //   } finally {
-    //     setIsParsingCV(false)
-    //   }
-    // }
+          updateFormData(updates)
+        } else {
+          const errorData = await response.json()
+          console.error("CV parsing failed:", errorData)
+        }
+      } catch (error) {
+        console.error("Error parsing CV:", error)
+      } finally {
+        setIsParsingCV(false)
+      }
+    }
   }
 
   return (
@@ -164,20 +173,18 @@ export function StepOne({ formData, updateFormData, missingFields }: StepOneProp
             accept=".pdf,.doc,.docx"
             onChange={(e) => handleFileChange(e, "cv")}
             className="cursor-pointer file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-primary-foreground hover:file:bg-primary/90"
-            // disabled={isParsingCV} // CV parsing disabled
+            disabled={isParsingCV}
           />
           {formData.cv && <p className="text-sm text-muted-foreground mt-2">Selected: {formData.cv.name}</p>}
-          {/* CV parsing feature disabled */}
-          {/* {isParsingCV && (
+          {isParsingCV && (
             <div className="flex items-center gap-2 mt-2 text-sm text-primary">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Analyzing your CV and filling form fields...</span>
+              <span>Analyzing your CV with AI and filling form fields...</span>
             </div>
-          )} */}
+          )}
         </div>
         <p className="text-sm text-muted-foreground">
-          Accepted formats: PDF, DOC, DOCX (Max 5MB)
-          {/* - Fields will be auto-filled from your CV */}
+          Accepted formats: PDF, DOC, DOCX (Max 5MB) - Fields will be auto-filled from your CV using AI
         </p>
       </div>
 

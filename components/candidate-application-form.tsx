@@ -4,11 +4,13 @@ import { useState, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+import { Label } from "@/components/ui/label"
 import { StepOne } from "./form-steps/step-one"
 import { StepTwo } from "./form-steps/step-two"
 import { StepThree } from "./form-steps/step-three"
 import { StepFour } from "./form-steps/step-four"
-import { ChevronLeft, ChevronRight, Upload, User, Briefcase, CheckCircle, History } from "lucide-react"
+import { StepFive } from "./form-steps/step-five"
+import { ChevronLeft, ChevronRight, Upload, User, Briefcase, CheckCircle, History, GraduationCap } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 export type WorkExperience = {
@@ -20,6 +22,13 @@ export type WorkExperience = {
   endYear: string
   description: string
   isCurrent: boolean
+}
+
+export type Education = {
+  degree: string
+  institute: string
+  startYear: string
+  endYear: string
 }
 
 export type FormData = {
@@ -41,14 +50,16 @@ export type FormData = {
   preferredLocation: string
   skills: string
   experience: string
-  education: string
   expectedSalaryCurrency: string
   expectedSalaryRange: string
 
   // Step 3 - Work History (Multiple Experiences)
   workExperiences: WorkExperience[]
 
-  // Step 4 - Preferences & Additional Info
+  // Step 4 - Education (Multiple Entries)
+  educations: Education[]
+
+  // Step 5 - Preferences & Additional Info
   linkedinProfile: string
   portfolio: string
   preferredRole: string
@@ -64,7 +75,8 @@ const STEPS = [
   { number: 1, title: "Upload CV & Basic Info", icon: Upload },
   { number: 2, title: "Professional Details", icon: User },
   { number: 3, title: "Work History", icon: History },
-  { number: 4, title: "Preferences & Additional", icon: Briefcase },
+  { number: 4, title: "Education", icon: GraduationCap },
+  { number: 5, title: "Preferences & Additional", icon: Briefcase },
 ]
 
 export default function CandidateApplicationForm() {
@@ -87,10 +99,10 @@ export default function CandidateApplicationForm() {
     preferredLocation: "",
     skills: "",
     experience: "",
-    education: "",
     expectedSalaryCurrency: "",
     expectedSalaryRange: "",
     workExperiences: [],
+    educations: [],
     linkedinProfile: "",
     portfolio: "",
     preferredRole: "",
@@ -128,7 +140,81 @@ export default function CandidateApplicationForm() {
 
   const missingFields = useMemo(() => getMissingFields(currentStep), [currentStep, formData])
 
-  const progress = (currentStep / STEPS.length) * 100
+  // Calculate form completion percentage
+  const formCompletionPercentage = useMemo(() => {
+    let filledFields = 0
+    let totalFields = 0
+
+    // Step 1 - Basic Info (9 required + 1 optional)
+    totalFields += 10
+    if (formData.cv) filledFields++
+    if (formData.name.trim()) filledFields++
+    if (formData.mobileNumber.trim()) filledFields++
+    if (formData.email.trim()) filledFields++
+    if (formData.photograph) filledFields++
+    if (formData.currentLocation.trim()) filledFields++
+    if (formData.currentSalaryCurrency) filledFields++
+    if (formData.salaryRange) filledFields++
+    if (formData.nationality.trim()) filledFields++
+    if (formData.gender) filledFields++
+
+    // Step 2 - Professional Details (5 required + 2 optional)
+    totalFields += 7
+    if (formData.seniorityLevel) filledFields++
+    if (formData.reportingManager.trim()) filledFields++
+    if (formData.preferredLocation.trim()) filledFields++
+    if (formData.skills.trim()) filledFields++
+    if (formData.experience.trim()) filledFields++
+    if (formData.expectedSalaryCurrency) filledFields++
+    if (formData.expectedSalaryRange) filledFields++
+
+    // Step 3 - Work Experiences (at least 1 required, each has 6 required + 1 optional)
+    // Count as complete if at least one experience is fully filled
+    if (formData.workExperiences.length > 0) {
+      const completeExperiences = formData.workExperiences.filter(exp => 
+        exp.companyName.trim() && 
+        exp.role.trim() && 
+        exp.startMonth && 
+        exp.startYear && 
+        (exp.isCurrent || (exp.endMonth && exp.endYear))
+      )
+      if (completeExperiences.length > 0) {
+        filledFields += 1 // Count as 1 field if at least one complete experience exists
+      }
+    }
+    totalFields += 1
+
+    // Step 4 - Educations (at least 1 required, each has 4 required fields)
+    // Count as complete if at least one education is fully filled
+    if (formData.educations.length > 0) {
+      const completeEducations = formData.educations.filter(edu => 
+        edu.degree.trim() && 
+        edu.institute.trim() && 
+        edu.startYear && 
+        edu.endYear
+      )
+      if (completeEducations.length > 0) {
+        filledFields += 1 // Count as 1 field if at least one complete education exists
+      }
+    }
+    totalFields += 1
+
+    // Step 5 - Preferences (3 required + 6 optional)
+    totalFields += 9
+    if (formData.linkedinProfile.trim()) filledFields++
+    if (formData.portfolio.trim()) filledFields++
+    if (formData.preferredRole.trim()) filledFields++
+    if (formData.workPermitStatus) filledFields++
+    if (formData.employmentType) filledFields++
+    if (formData.workMode) filledFields++
+    if (formData.references.trim()) filledFields++
+    if (formData.noticePeriod) filledFields++
+    if (formData.activelySeekingToggle) filledFields++
+
+    return Math.round((filledFields / totalFields) * 100)
+  }, [formData])
+
+  const stepProgress = (currentStep / STEPS.length) * 100
 
   const handleNext = () => {
     if (currentStep < STEPS.length) {
@@ -162,8 +248,8 @@ export default function CandidateApplicationForm() {
       formDataToSubmit.append("preferredLocation", formData.preferredLocation)
       formDataToSubmit.append("skills", formData.skills)
       formDataToSubmit.append("experience", formData.experience)
-      formDataToSubmit.append("education", formData.education)
       formDataToSubmit.append("workExperiences", JSON.stringify(formData.workExperiences))
+      formDataToSubmit.append("educations", JSON.stringify(formData.educations))
       formDataToSubmit.append("expectedSalaryCurrency", formData.expectedSalaryCurrency)
       formDataToSubmit.append("expectedSalaryRange", formData.expectedSalaryRange)
       formDataToSubmit.append("linkedinProfile", formData.linkedinProfile)
@@ -250,10 +336,10 @@ export default function CandidateApplicationForm() {
                   preferredLocation: "",
                   skills: "",
                   experience: "",
-                  education: "",
                   expectedSalaryCurrency: "",
                   expectedSalaryRange: "",
                   workExperiences: [],
+                  educations: [],
                   linkedinProfile: "",
                   portfolio: "",
                   preferredRole: "",
@@ -280,10 +366,26 @@ export default function CandidateApplicationForm() {
     <div className="mx-auto max-w-4xl">
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold text-foreground mb-2 text-balance">Join Our Team</h1>
-        <p className="text-muted-foreground text-lg">Complete your application in just 4 simple steps</p>
+        <p className="text-muted-foreground text-lg">Complete your application in just 5 simple steps</p>
       </div>
 
-      {/* Progress Bar */}
+      {/* Overall Form Completion Progress Bar */}
+      <Card className="mb-8 border-2">
+        <CardContent className="pt-6">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-base font-semibold">Form Completion</Label>
+              <span className="text-sm font-medium text-muted-foreground">{formCompletionPercentage}%</span>
+            </div>
+            <Progress value={formCompletionPercentage} className="h-3" />
+            <p className="text-xs text-muted-foreground mt-1">
+              Fill in all fields to complete your application
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Step Progress Bar */}
       <div className="mb-8">
         <div className="flex justify-between mb-4">
           {STEPS.map((step) => {
@@ -315,7 +417,7 @@ export default function CandidateApplicationForm() {
             )
           })}
         </div>
-        <Progress value={progress} className="h-2" />
+        <Progress value={stepProgress} className="h-2" />
       </div>
 
       <Card className="border-2">
@@ -327,7 +429,8 @@ export default function CandidateApplicationForm() {
             {currentStep === 1 && "Start by uploading your CV and providing basic information"}
             {currentStep === 2 && "Tell us about your professional background"}
             {currentStep === 3 && "Add your work experience history"}
-            {currentStep === 4 && "Share your preferences and additional details"}
+            {currentStep === 4 && "Add your educational qualifications"}
+            {currentStep === 5 && "Share your preferences and additional details"}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -335,6 +438,7 @@ export default function CandidateApplicationForm() {
           {currentStep === 2 && <StepTwo formData={formData} updateFormData={updateFormData} />}
           {currentStep === 3 && <StepThree formData={formData} updateFormData={updateFormData} />}
           {currentStep === 4 && <StepFour formData={formData} updateFormData={updateFormData} />}
+          {currentStep === 5 && <StepFive formData={formData} updateFormData={updateFormData} />}
 
           {/* Navigation Buttons */}
           <div className="flex justify-between mt-8 pt-6 border-t">

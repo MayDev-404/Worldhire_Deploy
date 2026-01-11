@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 20, "column": 0}, "map": {"version":3,"sources":["file:///home/manas/hiring-website-form/app/page.tsx"],"sourcesContent":["import CandidateApplicationForm from \"@/components/candidate-application-form\"\n\nexport default function Home() {\n  return (\n    <div className=\"min-h-screen bg-background py-12 px-4\">\n      <CandidateApplicationForm />\n    </div>\n  )\n}\n"],"names":[],"mappings":";;;;;AAAA;;;AAEe,SAAS;IACtB,qBACE,8OAAC;QAAI,WAAU;kBACb,cAAA,8OAAC,0JAAwB;;;;;;;;;;AAG/B"}}]
+}

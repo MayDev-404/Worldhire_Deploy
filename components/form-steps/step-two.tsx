@@ -141,20 +141,6 @@ export function StepTwo({ formData, updateFormData }: StepTwoProps) {
         />
       </div>
 
-      {/* Education */}
-      <div className="space-y-2">
-        <Label htmlFor="education" className="text-base">
-          Education <span className="text-destructive">*</span>
-        </Label>
-        <Textarea
-          id="education"
-          placeholder="Degree, Institution, Year of graduation"
-          value={formData.education}
-          onChange={(e) => updateFormData({ education: e.target.value })}
-          rows={3}
-        />
-      </div>
-
       {/* Expected Salary Currency & Expected Salary Range - Grid */}
       <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-2">
