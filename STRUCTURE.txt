@@ -1,0 +1,21 @@
+Project Structure:
+==================
+
+frontend/              # Next.js frontend application
+  ├── app/            # Pages and routes
+  ├── components/     # React components
+  ├── lib/            # Utilities and API client
+  ├── public/         # Static assets
+  ├── hooks/          # React hooks
+  ├── types/          # TypeScript types
+  ├── styles/         # Global styles
+  └── package.json    # Frontend dependencies
+
+backend/              # FastAPI backend application
+  ├── app/            # FastAPI application code
+  │   ├── api/        # API routes
+  │   ├── services/   # Business logic
+  │   └── main.py     # FastAPI app entry
+  └── requirements.txt # Backend dependencies
+
+scripts/              # Database migration scripts

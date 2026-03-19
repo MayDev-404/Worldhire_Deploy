@@ -932,38 +932,29 @@ function StepOne({ formData, updateFormData, missingFields }) {
         if (field === "cv" && file) {
             setIsParsingCV(true);
             try {
-                const formDataToSend = new FormData();
-                formDataToSend.append("file", file);
-                const response = await fetch("/api/parse-cv", {
-                    method: "POST",
-                    body: formDataToSend
-                });
-                if (response.ok) {
-                    const { data } = await response.json();
-                    // Auto-fill form fields with extracted data
-                    const updates = {};
-                    if (data.name) updates.name = data.name;
-                    if (data.email) updates.email = data.email;
-                    if (data.phone) updates.mobileNumber = data.phone;
-                    if (data.location) updates.currentLocation = data.location;
-                    if (data.nationality) updates.nationality = data.nationality;
-                    if (data.skills) updates.skills = data.skills;
-                    if (data.experience) updates.experience = data.experience;
-                    if (data.linkedinProfile) updates.linkedinProfile = data.linkedinProfile;
-                    if (data.preferredRole) updates.preferredRole = data.preferredRole;
-                    // Handle structured work experiences
-                    if (data.workExperiences && Array.isArray(data.workExperiences) && data.workExperiences.length > 0) {
-                        updates.workExperiences = data.workExperiences;
-                    }
-                    // Handle structured educations
-                    if (data.educations && Array.isArray(data.educations) && data.educations.length > 0) {
-                        updates.educations = data.educations;
-                    }
-                    updateFormData(updates);
-                } else {
-                    const errorData = await response.json();
-                    console.error("CV parsing failed:", errorData);
+                const { apiClient } = await __turbopack_context__.A("[project]/lib/api-client.ts [app-client] (ecmascript, async loader)");
+                const response = await apiClient.parseCV(file);
+                // Auto-fill form fields with extracted data
+                const { data } = response;
+                const updates = {};
+                if (data.name) updates.name = data.name;
+                if (data.email) updates.email = data.email;
+                if (data.phone) updates.mobileNumber = data.phone;
+                if (data.location) updates.currentLocation = data.location;
+                if (data.nationality) updates.nationality = data.nationality;
+                if (data.skills) updates.skills = data.skills;
+                if (data.experience) updates.experience = data.experience;
+                if (data.linkedinProfile) updates.linkedinProfile = data.linkedinProfile;
+                if (data.preferredRole) updates.preferredRole = data.preferredRole;
+                // Handle structured work experiences
+                if (data.workExperiences && Array.isArray(data.workExperiences) && data.workExperiences.length > 0) {
+                    updates.workExperiences = data.workExperiences;
                 }
+                // Handle structured educations
+                if (data.educations && Array.isArray(data.educations) && data.educations.length > 0) {
+                    updates.educations = data.educations;
+                }
+                updateFormData(updates);
             } catch (error) {
                 console.error("Error parsing CV:", error);
             } finally{
@@ -987,13 +978,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                 children: "*"
                             }, void 0, false, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 167,
+                                lineNumber: 156,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 166,
+                        lineNumber: 155,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1008,7 +999,7 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                 disabled: isParsingCV
                             }, void 0, false, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 170,
+                                lineNumber: 159,
                                 columnNumber: 11
                             }, this),
                             formData.cv && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1019,7 +1010,7 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 178,
+                                lineNumber: 167,
                                 columnNumber: 27
                             }, this),
                             isParsingCV && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1029,26 +1020,26 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         className: "h-4 w-4 animate-spin"
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 181,
+                                        lineNumber: 170,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "Analyzing your CV with AI and filling form fields..."
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 182,
+                                        lineNumber: 171,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 180,
+                                lineNumber: 169,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 169,
+                        lineNumber: 158,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1056,13 +1047,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                         children: "Accepted formats: PDF, DOC, DOCX (Max 5MB) - Fields will be auto-filled from your CV using AI"
                     }, void 0, false, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 186,
+                        lineNumber: 175,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/form-steps/step-one.tsx",
-                lineNumber: 165,
+                lineNumber: 154,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1078,13 +1069,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                 children: "*"
                             }, void 0, false, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 194,
+                                lineNumber: 183,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 193,
+                        lineNumber: 182,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1097,13 +1088,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                         className: fieldHasError("name") ? "border-destructive" : ""
                     }, void 0, false, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 196,
+                        lineNumber: 185,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/form-steps/step-one.tsx",
-                lineNumber: 192,
+                lineNumber: 181,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1122,13 +1113,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         children: "*"
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 209,
+                                        lineNumber: 198,
                                         columnNumber: 27
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 208,
+                                lineNumber: 197,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1148,12 +1139,12 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                                     placeholder: "Code"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/form-steps/step-one.tsx",
-                                                    lineNumber: 219,
+                                                    lineNumber: 208,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                                lineNumber: 218,
+                                                lineNumber: 207,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -1162,18 +1153,18 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                                         children: label
                                                     }, code, false, {
                                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                                        lineNumber: 223,
+                                                        lineNumber: 212,
                                                         columnNumber: 19
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                                lineNumber: 221,
+                                                lineNumber: 210,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 212,
+                                        lineNumber: 201,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1187,13 +1178,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         className: missingFields.has("mobileNumber") ? "border-destructive" : ""
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 229,
+                                        lineNumber: 218,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 211,
+                                lineNumber: 200,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1201,13 +1192,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                 children: "Choose a code or type your own in the number field (you can paste full numbers too)."
                             }, void 0, false, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 242,
+                                lineNumber: 231,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 207,
+                        lineNumber: 196,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1223,13 +1214,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         children: "*"
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 249,
+                                        lineNumber: 238,
                                         columnNumber: 22
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 248,
+                                lineNumber: 237,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1243,19 +1234,19 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                 className: fieldHasError("email") ? "border-destructive" : ""
                             }, void 0, false, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 251,
+                                lineNumber: 240,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 247,
+                        lineNumber: 236,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/form-steps/step-one.tsx",
-                lineNumber: 206,
+                lineNumber: 195,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1271,13 +1262,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                 children: "(Optional)"
                             }, void 0, false, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 265,
+                                lineNumber: 254,
                                 columnNumber: 31
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 264,
+                        lineNumber: 253,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1288,7 +1279,7 @@ function StepOne({ formData, updateFormData, missingFields }) {
                         className: "cursor-pointer file:mr-4 file:rounded-md file:border-0 file:bg-secondary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-secondary-foreground hover:file:bg-secondary/80"
                     }, void 0, false, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 267,
+                        lineNumber: 256,
                         columnNumber: 9
                     }, this),
                     formData.photograph && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1299,13 +1290,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 274,
+                        lineNumber: 263,
                         columnNumber: 33
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/form-steps/step-one.tsx",
-                lineNumber: 263,
+                lineNumber: 252,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1321,13 +1312,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                 children: "*"
                             }, void 0, false, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 280,
+                                lineNumber: 269,
                                 columnNumber: 28
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 279,
+                        lineNumber: 268,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1340,13 +1331,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                         className: fieldHasError("currentLocation") ? "border-destructive" : ""
                     }, void 0, false, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 282,
+                        lineNumber: 271,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/form-steps/step-one.tsx",
-                lineNumber: 278,
+                lineNumber: 267,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1365,13 +1356,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         children: "*"
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 295,
+                                        lineNumber: 284,
                                         columnNumber: 37
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 294,
+                                lineNumber: 283,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
@@ -1388,12 +1379,12 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                             placeholder: "Select currency"
                                         }, void 0, false, {
                                             fileName: "[project]/components/form-steps/step-one.tsx",
-                                            lineNumber: 305,
+                                            lineNumber: 294,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 301,
+                                        lineNumber: 290,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -1403,7 +1394,7 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                                 children: "USD"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                                lineNumber: 308,
+                                                lineNumber: 297,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1411,7 +1402,7 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                                 children: "EUR"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                                lineNumber: 309,
+                                                lineNumber: 298,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1419,7 +1410,7 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                                 children: "GBP"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                                lineNumber: 310,
+                                                lineNumber: 299,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1427,7 +1418,7 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                                 children: "INR"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                                lineNumber: 311,
+                                                lineNumber: 300,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1435,7 +1426,7 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                                 children: "AUD"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                                lineNumber: 312,
+                                                lineNumber: 301,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1443,25 +1434,25 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                                 children: "CAD"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                                lineNumber: 313,
+                                                lineNumber: 302,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 307,
+                                        lineNumber: 296,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 297,
+                                lineNumber: 286,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 293,
+                        lineNumber: 282,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1477,13 +1468,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         children: "*"
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 320,
+                                        lineNumber: 309,
                                         columnNumber: 34
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 319,
+                                lineNumber: 308,
                                 columnNumber: 11
                             }, this),
                             (()=>{
@@ -1501,12 +1492,12 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                                 placeholder: ranges[0]?.label ?? "Select range"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                                lineNumber: 333,
+                                                lineNumber: 322,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/form-steps/step-one.tsx",
-                                            lineNumber: 329,
+                                            lineNumber: 318,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -1515,31 +1506,31 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                                     children: range.label
                                                 }, range.value, false, {
                                                     fileName: "[project]/components/form-steps/step-one.tsx",
-                                                    lineNumber: 337,
+                                                    lineNumber: 326,
                                                     columnNumber: 21
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/components/form-steps/step-one.tsx",
-                                            lineNumber: 335,
+                                            lineNumber: 324,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/form-steps/step-one.tsx",
-                                    lineNumber: 325,
+                                    lineNumber: 314,
                                     columnNumber: 15
                                 }, this);
                             })()
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 318,
+                        lineNumber: 307,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/form-steps/step-one.tsx",
-                lineNumber: 292,
+                lineNumber: 281,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1555,13 +1546,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                 children: "*"
                             }, void 0, false, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 351,
+                                lineNumber: 340,
                                 columnNumber: 23
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 350,
+                        lineNumber: 339,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1574,13 +1565,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                         className: fieldHasError("nationality") ? "border-destructive" : ""
                     }, void 0, false, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 353,
+                        lineNumber: 342,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/form-steps/step-one.tsx",
-                lineNumber: 349,
+                lineNumber: 338,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1595,13 +1586,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                 children: "*"
                             }, void 0, false, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 365,
+                                lineNumber: 354,
                                 columnNumber: 18
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 364,
+                        lineNumber: 353,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$radio$2d$group$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["RadioGroup"], {
@@ -1619,7 +1610,7 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         id: "male"
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 373,
+                                        lineNumber: 362,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
@@ -1628,13 +1619,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         children: "Male"
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 374,
+                                        lineNumber: 363,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 372,
+                                lineNumber: 361,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1645,7 +1636,7 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         id: "female"
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 379,
+                                        lineNumber: 368,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
@@ -1654,13 +1645,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         children: "Female"
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 380,
+                                        lineNumber: 369,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 378,
+                                lineNumber: 367,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1671,7 +1662,7 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         id: "non-binary"
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 385,
+                                        lineNumber: 374,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
@@ -1680,13 +1671,13 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         children: "Non-binary"
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 386,
+                                        lineNumber: 375,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 384,
+                                lineNumber: 373,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1697,7 +1688,7 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         id: "prefer-not-to-say"
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 391,
+                                        lineNumber: 380,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
@@ -1706,31 +1697,31 @@ function StepOne({ formData, updateFormData, missingFields }) {
                                         children: "Prefer not to say"
                                     }, void 0, false, {
                                         fileName: "[project]/components/form-steps/step-one.tsx",
-                                        lineNumber: 392,
+                                        lineNumber: 381,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/form-steps/step-one.tsx",
-                                lineNumber: 390,
+                                lineNumber: 379,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/form-steps/step-one.tsx",
-                        lineNumber: 367,
+                        lineNumber: 356,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/form-steps/step-one.tsx",
-                lineNumber: 363,
+                lineNumber: 352,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/form-steps/step-one.tsx",
-        lineNumber: 163,
+        lineNumber: 152,
         columnNumber: 5
     }, this);
 }
@@ -4314,6 +4305,7 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/button.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/card.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$progress$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/progress.tsx [app-client] (ecmascript)");
@@ -4335,6 +4327,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$use$2d$toast$2e$ts_
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
+;
 ;
 ;
 ;
@@ -4376,6 +4369,7 @@ const STEPS = [
 ];
 function CandidateApplicationForm() {
     _s();
+    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const [currentStep, setCurrentStep] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(1);
     const [isSubmitting, setIsSubmitting] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [isSubmitted, setIsSubmitted] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -4551,22 +4545,25 @@ function CandidateApplicationForm() {
             if (formData.photograph) {
                 formDataToSubmit.append("photograph", formData.photograph);
             }
-            const response = await fetch("/api/submit-application", {
-                method: "POST",
-                body: formDataToSubmit
-            });
-            const result = await response.json();
-            if (!response.ok) {
-                // Show detailed error message
-                const errorMsg = result.error || result.details || "Failed to submit application";
-                console.error("[v0] Submission failed:", result);
-                throw new Error(errorMsg);
+            const { apiClient } = await __turbopack_context__.A("[project]/lib/api-client.ts [app-client] (ecmascript, async loader)");
+            const result = await apiClient.submitApplication(formDataToSubmit);
+            if (result.success && result.candidate?.id) {
+                toast({
+                    title: "Application Submitted!",
+                    description: "Redirecting to your dashboard..."
+                });
+                // Redirect to candidate dashboard after a short delay
+                setTimeout(()=>{
+                    router.push(`/candidates/${result.candidate.id}`);
+                }, 1500);
+            } else {
+                // Fallback if no candidate ID (shouldn't happen, but handle gracefully)
+                setIsSubmitted(true);
+                toast({
+                    title: "Application Submitted!",
+                    description: "Thank you for applying. We'll review your application and get back to you soon."
+                });
             }
-            setIsSubmitted(true);
-            toast({
-                title: "Application Submitted!",
-                description: "Thank you for applying. We'll review your application and get back to you soon."
-            });
         } catch (error) {
             console.error("[v0] Submission error:", error);
             toast({
@@ -4592,12 +4589,12 @@ function CandidateApplicationForm() {
                                     className: "h-10 w-10 text-primary"
                                 }, void 0, false, {
                                     fileName: "[project]/components/candidate-application-form.tsx",
-                                    lineNumber: 310,
+                                    lineNumber: 314,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 309,
+                                lineNumber: 313,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardTitle"], {
@@ -4605,7 +4602,7 @@ function CandidateApplicationForm() {
                                 children: "Application Submitted Successfully!"
                             }, void 0, false, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 312,
+                                lineNumber: 316,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
@@ -4613,13 +4610,13 @@ function CandidateApplicationForm() {
                                 children: "Thank you for your interest in joining our team."
                             }, void 0, false, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 313,
+                                lineNumber: 317,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/candidate-application-form.tsx",
-                        lineNumber: 308,
+                        lineNumber: 312,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -4630,7 +4627,7 @@ function CandidateApplicationForm() {
                                 children: "We've received your application and our recruitment team will review it shortly. You'll hear from us soon!"
                             }, void 0, false, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 316,
+                                lineNumber: 320,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -4673,24 +4670,24 @@ function CandidateApplicationForm() {
                                 children: "Submit Another Application"
                             }, void 0, false, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 319,
+                                lineNumber: 323,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/candidate-application-form.tsx",
-                        lineNumber: 315,
+                        lineNumber: 319,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/candidate-application-form.tsx",
-                lineNumber: 307,
+                lineNumber: 311,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/candidate-application-form.tsx",
-            lineNumber: 306,
+            lineNumber: 310,
             columnNumber: 7
         }, this);
     }
@@ -4705,7 +4702,7 @@ function CandidateApplicationForm() {
                         children: "Join Our Team"
                     }, void 0, false, {
                         fileName: "[project]/components/candidate-application-form.tsx",
-                        lineNumber: 368,
+                        lineNumber: 372,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4713,13 +4710,13 @@ function CandidateApplicationForm() {
                         children: "Complete your application in just 5 simple steps"
                     }, void 0, false, {
                         fileName: "[project]/components/candidate-application-form.tsx",
-                        lineNumber: 369,
+                        lineNumber: 373,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/candidate-application-form.tsx",
-                lineNumber: 367,
+                lineNumber: 371,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -4737,7 +4734,7 @@ function CandidateApplicationForm() {
                                         children: "Form Completion"
                                     }, void 0, false, {
                                         fileName: "[project]/components/candidate-application-form.tsx",
-                                        lineNumber: 377,
+                                        lineNumber: 381,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4748,13 +4745,13 @@ function CandidateApplicationForm() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/candidate-application-form.tsx",
-                                        lineNumber: 378,
+                                        lineNumber: 382,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 376,
+                                lineNumber: 380,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$progress$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Progress"], {
@@ -4762,7 +4759,7 @@ function CandidateApplicationForm() {
                                 className: "h-3"
                             }, void 0, false, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 380,
+                                lineNumber: 384,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4770,23 +4767,23 @@ function CandidateApplicationForm() {
                                 children: "Fill in all fields to complete your application"
                             }, void 0, false, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 381,
+                                lineNumber: 385,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/candidate-application-form.tsx",
-                        lineNumber: 375,
+                        lineNumber: 379,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/candidate-application-form.tsx",
-                    lineNumber: 374,
+                    lineNumber: 378,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/candidate-application-form.tsx",
-                lineNumber: 373,
+                lineNumber: 377,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4806,18 +4803,18 @@ function CandidateApplicationForm() {
                                             children: "✓"
                                         }, void 0, false, {
                                             fileName: "[project]/components/candidate-application-form.tsx",
-                                            lineNumber: 413,
+                                            lineNumber: 417,
                                             columnNumber: 48
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(StepIcon, {
                                             className: "h-5 w-5"
                                         }, void 0, false, {
                                             fileName: "[project]/components/candidate-application-form.tsx",
-                                            lineNumber: 413,
+                                            lineNumber: 417,
                                             columnNumber: 85
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/candidate-application-form.tsx",
-                                        lineNumber: 404,
+                                        lineNumber: 408,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4825,19 +4822,19 @@ function CandidateApplicationForm() {
                                         children: step.title
                                     }, void 0, false, {
                                         fileName: "[project]/components/candidate-application-form.tsx",
-                                        lineNumber: 415,
+                                        lineNumber: 419,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, step.number, true, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 394,
+                                lineNumber: 398,
                                 columnNumber: 15
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/components/candidate-application-form.tsx",
-                        lineNumber: 390,
+                        lineNumber: 394,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$progress$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Progress"], {
@@ -4845,13 +4842,13 @@ function CandidateApplicationForm() {
                         className: "h-2"
                     }, void 0, false, {
                         fileName: "[project]/components/candidate-application-form.tsx",
-                        lineNumber: 420,
+                        lineNumber: 424,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/candidate-application-form.tsx",
-                lineNumber: 389,
+                lineNumber: 393,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -4869,7 +4866,7 @@ function CandidateApplicationForm() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 425,
+                                lineNumber: 429,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
@@ -4882,13 +4879,13 @@ function CandidateApplicationForm() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 428,
+                                lineNumber: 432,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/candidate-application-form.tsx",
-                        lineNumber: 424,
+                        lineNumber: 428,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -4899,7 +4896,7 @@ function CandidateApplicationForm() {
                                 missingFields: missingFields
                             }, void 0, false, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 437,
+                                lineNumber: 441,
                                 columnNumber: 33
                             }, this),
                             currentStep === 2 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$form$2d$steps$2f$step$2d$two$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["StepTwo"], {
@@ -4907,7 +4904,7 @@ function CandidateApplicationForm() {
                                 updateFormData: updateFormData
                             }, void 0, false, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 438,
+                                lineNumber: 442,
                                 columnNumber: 33
                             }, this),
                             currentStep === 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$form$2d$steps$2f$step$2d$three$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["StepThree"], {
@@ -4915,7 +4912,7 @@ function CandidateApplicationForm() {
                                 updateFormData: updateFormData
                             }, void 0, false, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 439,
+                                lineNumber: 443,
                                 columnNumber: 33
                             }, this),
                             currentStep === 4 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$form$2d$steps$2f$step$2d$four$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["StepFour"], {
@@ -4923,7 +4920,7 @@ function CandidateApplicationForm() {
                                 updateFormData: updateFormData
                             }, void 0, false, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 440,
+                                lineNumber: 444,
                                 columnNumber: 33
                             }, this),
                             currentStep === 5 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$form$2d$steps$2f$step$2d$five$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["StepFive"], {
@@ -4931,7 +4928,7 @@ function CandidateApplicationForm() {
                                 updateFormData: updateFormData
                             }, void 0, false, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 441,
+                                lineNumber: 445,
                                 columnNumber: 33
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4947,14 +4944,14 @@ function CandidateApplicationForm() {
                                                 className: "h-4 w-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                                lineNumber: 451,
+                                                lineNumber: 455,
                                                 columnNumber: 15
                                             }, this),
                                             "Previous"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/candidate-application-form.tsx",
-                                        lineNumber: 445,
+                                        lineNumber: 449,
                                         columnNumber: 13
                                     }, this),
                                     currentStep < STEPS.length ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -4967,13 +4964,13 @@ function CandidateApplicationForm() {
                                                 className: "h-4 w-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                                lineNumber: 458,
+                                                lineNumber: 462,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/candidate-application-form.tsx",
-                                        lineNumber: 456,
+                                        lineNumber: 460,
                                         columnNumber: 15
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                         onClick: handleSubmit,
@@ -4985,42 +4982,43 @@ function CandidateApplicationForm() {
                                                 className: "h-4 w-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                                lineNumber: 463,
+                                                lineNumber: 467,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/candidate-application-form.tsx",
-                                        lineNumber: 461,
+                                        lineNumber: 465,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/candidate-application-form.tsx",
-                                lineNumber: 444,
+                                lineNumber: 448,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/candidate-application-form.tsx",
-                        lineNumber: 436,
+                        lineNumber: 440,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/candidate-application-form.tsx",
-                lineNumber: 423,
+                lineNumber: 427,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/candidate-application-form.tsx",
-        lineNumber: 366,
+        lineNumber: 370,
         columnNumber: 5
     }, this);
 }
-_s(CandidateApplicationForm, "Z9m2EnB/+/1pvjYCMOFzR4JwrZU=", false, function() {
+_s(CandidateApplicationForm, "XZiuwoYLgXZzWclW6jCNrxqcjGE=", false, function() {
     return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
         __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useToast"]
     ];
 });

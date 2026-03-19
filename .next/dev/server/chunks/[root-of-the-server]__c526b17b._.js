@@ -263,16 +263,12 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$serv
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$cv$2d$parser$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/cv-parser.ts [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mammoth$2f$lib$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/mammoth/lib/index.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$tesseract$2e$js$2f$src$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/tesseract.js/src/index.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$pdf$2d$parse$2f$dist$2f$pdf$2d$parse$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/pdf-parse/dist/pdf-parse/esm/index.js [app-route] (ecmascript) <locals>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$pdf$2d$parse$2f$dist$2f$pdf$2d$parse$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/pdf-parse/dist/pdf-parse/esm/index.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$externals$5d2f$canvas__$5b$external$5d$__$28$canvas$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/canvas [external] (canvas, cjs)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$pdfjs$2d$dist$2f$legacy$2f$build$2f$pdf$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/pdfjs-dist/legacy/build/pdf.mjs [app-route] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$externals$5d2f$canvas__$5b$external$5d$__$28$canvas$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/canvas [external] (canvas, cjs)");
 ;
 ;
 ;
 ;
-;
-const pdfParse = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$pdf$2d$parse$2f$dist$2f$pdf$2d$parse$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__.default || __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$pdf$2d$parse$2f$dist$2f$pdf$2d$parse$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__;
 ;
 ;
 async function POST(request) {
@@ -295,78 +291,73 @@ async function POST(request) {
                     throw new Error("PDF buffer is empty");
                 }
                 console.log("[CV Parser] PDF file received, size:", buffer.length, "bytes");
-                // First, try direct text extraction using pdf-parse (fast, no workers needed)
-                let directText = "";
+                // Disable worker for Node.js - pdfjs-dist can work without it
+                // This avoids Turbopack module resolution issues
+                // Note: Some versions of pdfjs-dist may still try to use a worker
+                // If that fails, we'll catch the error and provide a helpful message
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$pdfjs$2d$dist$2f$legacy$2f$build$2f$pdf$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__["GlobalWorkerOptions"].workerSrc = "";
+                console.log("[CV Parser] Loading PDF and converting pages to images for OCR...");
+                // Load the PDF document
+                // Wrap in try-catch to handle worker-related errors gracefully
+                let pdfDocument;
                 try {
-                    console.log("[CV Parser] Attempting direct text extraction...");
-                    const pdfData = await pdfParse(buffer);
-                    directText = pdfData.text || "";
-                    console.log("[CV Parser] Direct text extraction:", directText.length, "characters");
-                } catch (parseError) {
-                    console.log("[CV Parser] Direct text extraction failed, will use OCR:", parseError);
-                }
-                // If direct extraction got meaningful text (>100 chars), use it
-                // Otherwise, fall back to OCR for image-based/scanned PDFs
-                if (directText && directText.trim().length > 100) {
-                    extractedText = directText.trim();
-                    console.log("[CV Parser] Using directly extracted text (no OCR needed)");
-                } else {
-                    // Fallback to OCR: Convert PDF pages to images and extract text
-                    console.log("[CV Parser] Direct extraction insufficient, using OCR...");
-                    // Configure pdfjs-dist for Node.js (disable worker)
-                    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$pdfjs$2d$dist$2f$legacy$2f$build$2f$pdf$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__["GlobalWorkerOptions"].workerSrc = "";
-                    // Load the PDF document
                     const loadingTask = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$pdfjs$2d$dist$2f$legacy$2f$build$2f$pdf$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__["getDocument"]({
                         data: new Uint8Array(buffer),
                         verbosity: 0
                     });
-                    const pdfDocument = await loadingTask.promise;
-                    const numPages = pdfDocument.numPages;
-                    console.log("[CV Parser] PDF loaded for OCR, pages:", numPages);
-                    // Initialize Tesseract OCR worker
-                    console.log("[CV Parser] Initializing Tesseract OCR...");
-                    const tesseractWorker = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$tesseract$2e$js$2f$src$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["createWorker"])("eng");
-                    let fullText = "";
-                    // Process each page: convert to image, then OCR
-                    for(let pageNum = 1; pageNum <= numPages; pageNum++){
-                        console.log(`[CV Parser] Processing page ${pageNum}/${numPages}...`);
-                        const page = await pdfDocument.getPage(pageNum);
-                        const viewport = page.getViewport({
-                            scale: 2.0
-                        }) // Higher scale for better OCR quality
-                        ;
-                        // Create canvas and render PDF page
-                        const canvas = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$canvas__$5b$external$5d$__$28$canvas$2c$__cjs$29$__["createCanvas"])(viewport.width, viewport.height);
-                        const context = canvas.getContext("2d");
-                        // Render PDF page to canvas
-                        const renderContext = {
-                            canvasContext: context,
-                            viewport: viewport
-                        };
-                        await page.render(renderContext).promise;
-                        // Convert canvas to image buffer (PNG format)
-                        const imageBuffer = canvas.toBuffer("image/png");
-                        // Use Tesseract OCR to extract text from the image
-                        console.log(`[CV Parser] Running OCR on page ${pageNum}...`);
-                        const { data: { text } } = await tesseractWorker.recognize(imageBuffer);
-                        fullText += text + "\n\n";
-                        console.log(`[CV Parser] Page ${pageNum} OCR completed, extracted ${text.length} characters`);
-                        // Clean up page resources
-                        page.cleanup();
+                    pdfDocument = await loadingTask.promise;
+                } catch (loadError) {
+                    // If loading fails due to worker issues, provide a helpful error
+                    if (loadError.message && loadError.message.includes("worker")) {
+                        throw new Error("PDF parsing failed due to worker configuration. " + "This is a known issue with pdfjs-dist in Next.js. " + "Please try a different PDF file or contact support.");
                     }
-                    // Clean up PDF document
-                    await pdfDocument.destroy();
-                    // Terminate Tesseract worker
-                    await tesseractWorker.terminate();
-                    extractedText = fullText.trim();
-                    console.log("[CV Parser] PDF OCR completed successfully:", {
-                        textLength: extractedText.length,
-                        numPages: numPages,
-                        hasText: extractedText.length > 0
-                    });
+                    throw loadError;
                 }
+                const numPages = pdfDocument.numPages;
+                console.log("[CV Parser] PDF loaded, pages:", numPages);
+                // Initialize Tesseract OCR worker
+                console.log("[CV Parser] Initializing Tesseract OCR...");
+                const tesseractWorker = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$tesseract$2e$js$2f$src$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["createWorker"])("eng");
+                let fullText = "";
+                // Process each page: convert to image, then OCR
+                for(let pageNum = 1; pageNum <= numPages; pageNum++){
+                    console.log(`[CV Parser] Processing page ${pageNum}/${numPages}...`);
+                    const page = await pdfDocument.getPage(pageNum);
+                    const viewport = page.getViewport({
+                        scale: 2.0
+                    }) // Higher scale for better OCR quality
+                    ;
+                    // Create canvas and render PDF page
+                    const canvas = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$canvas__$5b$external$5d$__$28$canvas$2c$__cjs$29$__["createCanvas"])(viewport.width, viewport.height);
+                    const context = canvas.getContext("2d");
+                    // Render PDF page to canvas
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    await page.render(renderContext).promise;
+                    // Convert canvas to image buffer (PNG format)
+                    const imageBuffer = canvas.toBuffer("image/png");
+                    // Use Tesseract OCR to extract text from the image
+                    console.log(`[CV Parser] Running OCR on page ${pageNum}...`);
+                    const { data: { text } } = await tesseractWorker.recognize(imageBuffer);
+                    fullText += text + "\n\n";
+                    console.log(`[CV Parser] Page ${pageNum} OCR completed, extracted ${text.length} characters`);
+                    // Clean up page resources
+                    page.cleanup();
+                }
+                // Clean up PDF document
+                await pdfDocument.destroy();
+                // Terminate Tesseract worker
+                await tesseractWorker.terminate();
+                extractedText = fullText.trim();
+                console.log("[CV Parser] PDF OCR completed successfully:", {
+                    textLength: extractedText.length,
+                    numPages: numPages,
+                    hasText: extractedText.length > 0
+                });
                 if (!extractedText || extractedText.trim().length === 0) {
-                    console.warn("[CV Parser] Warning: Text extraction completed but result is empty");
+                    console.warn("[CV Parser] Warning: OCR completed but extracted text is empty");
                 }
             } catch (pdfError) {
                 console.error("[CV Parser] Error parsing PDF with OCR:", pdfError);

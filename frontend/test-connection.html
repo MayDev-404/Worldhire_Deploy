@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Backend Connection Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test { margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Backend Connection Test</h1>
+    <div id="results"></div>
+    
+    <button onclick="testHealth()">Test Health Endpoint</button>
+    <button onclick="testRoot()">Test Root Endpoint</button>
+    <button onclick="testCORS()">Test CORS</button>
+    <button onclick="testAll()">Test All</button>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8000';
+        const resultsDiv = document.getElementById('results');
+
+        function addResult(testName, success, message, details = '') {
+            const div = document.createElement('div');
+            div.className = `test ${success ? 'success' : 'error'}`;
+            div.innerHTML = `
+                <strong>${testName}:</strong> ${success ? '✓ PASS' : '✗ FAIL'}<br>
+                ${message}<br>
+                ${details ? `<small>${details}</small>` : ''}
+            `;
+            resultsDiv.appendChild(div);
+        }
+
+        async function testHealth() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`);
+                const data = await response.json();
+                addResult('Health Check', response.ok, `Status: ${response.status}`, JSON.stringify(data, null, 2));
+            } catch (error) {
+                addResult('Health Check', false, `Error: ${error.message}`);
+            }
+        }
+
+        async function testRoot() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/`);
+                const data = await response.json();
+                addResult('Root Endpoint', response.ok, `Status: ${response.status}`, JSON.stringify(data, null, 2));
+            } catch (error) {
+                addResult('Root Endpoint', false, `Error: ${error.message}`);
+            }
+        }
+
+        async function testCORS() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Origin': 'http://localhost:3000'
+                    }
+                });
+                const corsHeader = response.headers.get('access-control-allow-origin');
+                addResult('CORS Test', !!corsHeader, 
+                    corsHeader ? `CORS enabled: ${corsHeader}` : 'CORS headers not found',
+                    `Response status: ${response.status}`);
+            } catch (error) {
+                addResult('CORS Test', false, `Error: ${error.message}`);
+            }
+        }
+
+        async function testAll() {
+            resultsDiv.innerHTML = '';
+            await testHealth();
+            await testRoot();
+            await testCORS();
+        }
+
+        // Auto-run on load
+        window.onload = () => {
+            addResult('Info', true, 'Click buttons above to test backend connection', 'Backend should be running on http://localhost:8000');
+        };
+    </script>
+</body>
+</html>
+
