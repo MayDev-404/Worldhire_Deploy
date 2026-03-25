@@ -40,13 +40,13 @@ export default function HeroSection() {
         <div className="max-w-4xl mx-auto text-center relative z-10">
           {/* Star Icon */}
           <div className="flex items-center justify-center mb-4">
-            <Star className="w-5 h-5 text-[#1e40af] fill-[#1e40af]" />
+            <Star className="w-5 h-5 text-primary fill-primary" />
           </div>
 
           {/* Headline */}
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
             From Job Posting to{" "}
-            <span className="text-[#1e40af]">Perfect Match</span>. All in One Workflow
+            <span className="text-primary">Perfect Match</span>. All in One Workflow
           </h1>
 
           {/* Description */}
@@ -66,7 +66,7 @@ export default function HeroSection() {
                   className="pl-10 h-12 text-lg"
                 />
               </div>
-              <Button className="bg-[#1e40af] hover:bg-[#1e3a8a] h-12 px-8">
+              <Button className="h-12 px-8">
                 Find Job
               </Button>
             </div>

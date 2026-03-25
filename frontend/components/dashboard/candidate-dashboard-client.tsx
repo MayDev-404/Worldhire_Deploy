@@ -26,6 +26,7 @@ export default function CandidateDashboardClient() {
   const [candidate, setCandidate] = useState<Candidate | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [savingSection, setSavingSection] = useState<string | null>(null)
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
 
   const getStoredToken = useCallback(() => {
     if (typeof window === "undefined") return null
@@ -103,7 +104,7 @@ export default function CandidateDashboardClient() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#f8f9fc]">
         <div className="text-center space-y-3">
-          <div className="w-10 h-10 border-3 border-[#1e40af] border-t-transparent rounded-full animate-spin mx-auto" />
+          <div className="w-10 h-10 border-3 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
           <p className="text-sm text-gray-400 font-medium">Loading dashboard...</p>
         </div>
       </div>
@@ -121,11 +122,17 @@ export default function CandidateDashboardClient() {
         candidate={candidate}
         initials={initials}
         onStatusChange={(status) => void handleStatusChange(status)}
+        isMobileOpen={isMobileSidebarOpen}
+        onCloseMobile={() => setIsMobileSidebarOpen(false)}
       />
 
       {/* Main content area */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        <DashboardHeader candidateName={candidate.name} initials={initials} />
+        <DashboardHeader
+          candidateName={candidate.name}
+          initials={initials}
+          onMobileMenuToggle={() => setIsMobileSidebarOpen((prev) => !prev)}
+        />
 
         <div className="flex-1 overflow-y-auto">
           <div className="max-w-[1200px] mx-auto px-6 py-6">

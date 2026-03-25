@@ -38,7 +38,7 @@ export default function ProfileHeader({ candidate, initials, isSaving = false, o
   return (
     <div className="relative overflow-hidden rounded-2xl bg-white shadow-sm border border-gray-100">
       {/* Gradient Banner */}
-      <div className="h-36 bg-gradient-to-r from-[#1e40af] via-[#7c3aed] to-[#6366f1] relative">
+      <div className="h-36 bg-gradient-to-r from-primary via-[#7c3aed] to-[#6366f1] relative">
         {/* Floating avatar inside banner */}
         <div className="absolute bottom-4 left-6">
           <Avatar className="h-20 w-20 border-4 border-white/30 shadow-xl">

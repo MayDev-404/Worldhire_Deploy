@@ -23,7 +23,7 @@ export default function StatsSection() {
           {stats.map((stat, index) => (
             <Card key={index} className="text-center">
               <CardContent className="p-8">
-                <div className="text-4xl font-bold text-[#1e40af] mb-2">
+                <div className="text-4xl font-bold text-primary mb-2">
                   {stat.value}
                 </div>
                 <div className="text-gray-600">{stat.label}</div>

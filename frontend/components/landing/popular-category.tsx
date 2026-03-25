@@ -11,7 +11,7 @@ const categories = [
 
 export default function PopularCategory() {
   return (
-    <section className="py-16 px-4 bg-[#1e40af]">
+    <section className="py-16 px-4 bg-primary">
       <div className="container mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-bold text-white">Popular category</h2>

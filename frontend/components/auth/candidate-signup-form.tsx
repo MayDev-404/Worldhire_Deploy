@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -16,6 +15,7 @@ import {
 } from "lucide-react"
 import { apiClient } from "@/lib/api-client"
 import { useToast } from "@/hooks/use-toast"
+import { SiteLogo } from "@/components/brand/site-logo"
 import {
   COUNTRY_CODE_OPTIONS,
   CURRENCY_OPTIONS,
@@ -410,9 +410,7 @@ export default function CandidateSignUpForm() {
       {/* Header */}
       <header className="bg-white border-b">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-2xl font-bold text-[#1e40af]">
-            worldhire
-          </Link>
+          <SiteLogo priority imgClassName="h-9 w-auto max-w-[200px]" />
           <button className="lg:hidden">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -422,7 +420,7 @@ export default function CandidateSignUpForm() {
       </header>
 
       {/* Progress Header */}
-      <div className="bg-gradient-to-r from-[#1e40af] to-[#3b82f6] text-white py-12">
+      <div className="bg-gradient-to-r from-primary to-[#3b82f6] text-white py-12">
         <div className="container mx-auto px-6 text-center">
           <h1 className="text-4xl font-bold mb-2">Complete Profile</h1>
           <p className="text-blue-100">Complete your application in just {steps.length} simple steps</p>
@@ -438,9 +436,9 @@ export default function CandidateSignUpForm() {
                 <div key={step.id} className="flex items-center">
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 ${
                     isActive 
-                      ? "bg-white border-white text-[#1e40af]" 
+                      ? "bg-white border-white text-primary" 
                       : isCompleted
-                      ? "bg-white border-white text-[#1e40af]"
+                      ? "bg-white border-white text-primary"
                       : "bg-transparent border-blue-300 text-blue-200"
                   }`}>
                     {isCompleted ? (
@@ -483,7 +481,7 @@ export default function CandidateSignUpForm() {
               <Button
                 type="button"
                 onClick={handleNext}
-                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white flex items-center gap-2"
+                className="bg-primary hover:bg-primary/90 text-white flex items-center gap-2"
               >
                 Continue
                 <ChevronRight className="w-4 h-4" />
@@ -493,7 +491,7 @@ export default function CandidateSignUpForm() {
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white"
+                className="bg-primary hover:bg-primary/90 text-white"
               >
                 {isSubmitting ? "Submitting..." : "Submit Application"}
               </Button>

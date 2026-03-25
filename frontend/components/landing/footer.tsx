@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="mb-4 md:mb-0">
-            <Link href="/" className="text-2xl font-bold text-[#1e40af]">
+            <Link href="/" className="text-2xl font-bold text-primary">
               WorldHire
             </Link>
           </div>

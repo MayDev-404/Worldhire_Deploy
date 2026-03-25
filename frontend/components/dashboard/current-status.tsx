@@ -52,7 +52,7 @@ export default function CurrentStatus({ candidate, isSaving = false, onSave }: C
     <Card className="rounded-2xl border border-gray-100 shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <CardTitle className="text-lg font-bold flex items-center gap-2">
-          <Building2 className="w-5 h-5 text-[#1e40af]" />
+          <Building2 className="w-5 h-5 text-primary" />
           Current Professional Status
         </CardTitle>
         <Button

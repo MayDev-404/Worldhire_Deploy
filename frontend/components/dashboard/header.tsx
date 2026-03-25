@@ -2,11 +2,10 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Sparkles, Bell, ChevronDown, LogOut } from "lucide-react"
+import { Sparkles, Bell, ChevronDown, LogOut, Menu } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,13 +14,15 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { apiClient } from "@/lib/api-client"
 import { useToast } from "@/hooks/use-toast"
+import { SiteLogo } from "@/components/brand/site-logo"
 
 type DashboardHeaderProps = {
   candidateName?: string
   initials?: string
+  onMobileMenuToggle?: () => void
 }
 
-export default function DashboardHeader({ candidateName, initials = "CU" }: DashboardHeaderProps) {
+export default function DashboardHeader({ candidateName, initials = "CU", onMobileMenuToggle }: DashboardHeaderProps) {
   const [isSigningOut, setIsSigningOut] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
@@ -62,17 +63,26 @@ export default function DashboardHeader({ candidateName, initials = "CU" }: Dash
   return (
     <header className="sticky top-0 z-40 w-full bg-white border-b border-gray-100">
       <div className="flex h-14 items-center justify-between px-6">
-        {/* Logo on left — visible here since sidebar may be hidden on mobile */}
-        <Link href="/" className="text-xl font-bold text-[#1e40af] lg:hidden">
-          worldhire
-        </Link>
+        {/* Mobile left side */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9 rounded-lg"
+            onClick={onMobileMenuToggle}
+            aria-label="Toggle side menu"
+          >
+            <Menu className="w-5 h-5 text-gray-700" />
+          </Button>
+          <SiteLogo imgClassName="h-8 w-auto max-w-[140px]" />
+        </div>
         <div className="hidden lg:block" />
 
         {/* Right side controls */}
         <div className="flex items-center gap-3">
           {/* AI Assistant Button */}
           <Button
-            className="bg-gradient-to-r from-[#1e40af] to-[#6366f1] hover:from-[#1e3a8a] hover:to-[#4f46e5] text-white text-xs font-semibold px-4 h-9 rounded-lg shadow-sm"
+            className="bg-gradient-to-r from-primary to-[#6366f1] hover:from-primary/90 hover:to-[#4f46e5] text-white text-xs font-semibold px-4 h-9 rounded-lg shadow-sm"
           >
             <Sparkles className="w-3.5 h-3.5 mr-1.5" />
             AI Assistant
@@ -91,7 +101,7 @@ export default function DashboardHeader({ candidateName, initials = "CU" }: Dash
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="flex items-center gap-2 h-9 px-2 rounded-lg hover:bg-gray-50" disabled={isSigningOut}>
                 <Avatar className="w-8 h-8">
-                  <AvatarFallback className="bg-gradient-to-br from-[#1e40af] to-[#6366f1] text-white text-xs font-semibold">
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-[#6366f1] text-white text-xs font-semibold">
                     {initials}
                   </AvatarFallback>
                 </Avatar>

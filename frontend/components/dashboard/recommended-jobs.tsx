@@ -27,7 +27,7 @@ function generateRecommendations(candidate: Candidate) {
 
   // Build dynamic job cards from candidate data
   const companies = [
-    { name: "BYJU'S", color: "#1e40af" },
+    { name: "BYJU'S", color: "var(--primary)" },
     { name: "Meta", color: "#6366f1" },
     { name: "Google", color: "#22c55e" },
     { name: "Amazon", color: "#f59e0b" },
@@ -81,7 +81,7 @@ export default function RecommendedJobs({ candidate }: RecommendedJobsProps) {
     <Card className="rounded-2xl border border-gray-100 shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <CardTitle className="text-base font-bold">Recommended Jobs</CardTitle>
-        <button className="text-xs font-semibold text-[#1e40af] hover:underline flex items-center gap-0.5">
+        <button className="text-xs font-semibold text-primary hover:underline flex items-center gap-0.5">
           View All <ChevronRight className="w-3.5 h-3.5" />
         </button>
       </CardHeader>
@@ -139,7 +139,7 @@ export default function RecommendedJobs({ candidate }: RecommendedJobsProps) {
                 <Bookmark className="w-3 h-3" />
                 Save
               </Button>
-              <Button size="sm" className="h-8 text-xs bg-[#1e40af] hover:bg-[#1e3a8a] flex-1">
+              <Button size="sm" className="h-8 text-xs flex-1">
                 Apply Now
               </Button>
             </div>

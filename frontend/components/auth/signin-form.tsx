@@ -59,7 +59,7 @@ export default function SignInForm() {
   return (
     <div className="min-h-screen flex">
       {/* Left Panel - Blue Gradient */}
-      <div className="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-[#1e40af] via-[#3b82f6] to-[#1e40af] p-12 flex-col justify-between text-white">
+      <div className="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-primary via-[#3b82f6] to-primary p-12 flex-col justify-between text-white">
         <div>
           <h1 className="text-5xl font-bold mb-4">
             Welcome Back! 👋
@@ -111,7 +111,7 @@ export default function SignInForm() {
             {/* Icon */}
             <div className="flex justify-center mb-6">
               <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-                <Mail className="w-8 h-8 text-[#1e40af]" />
+                <Mail className="w-8 h-8 text-primary" />
               </div>
             </div>
 
@@ -186,7 +186,7 @@ export default function SignInForm() {
                 </div>
                 <Link
                   href="/forgot-password"
-                  className="text-sm text-[#1e40af] hover:underline"
+                  className="text-sm text-primary hover:underline"
                 >
                   Forgot password?
                 </Link>
@@ -195,7 +195,7 @@ export default function SignInForm() {
               {/* Sign In Button */}
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white h-12 text-lg font-semibold"
+                className="w-full bg-gradient-to-r from-primary to-[#3b82f6] hover:from-primary/90 hover:to-[#2563eb] text-white h-12 text-lg font-semibold"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -261,7 +261,7 @@ export default function SignInForm() {
             {/* Sign Up Link */}
             <p className="text-center text-sm text-gray-600">
               Don't have an account?{" "}
-              <Link href="/signup?type=candidate" className="text-[#1e40af] font-semibold hover:underline">
+              <Link href="/signup?type=candidate" className="text-primary font-semibold hover:underline">
                 Sign up now
               </Link>
             </p>

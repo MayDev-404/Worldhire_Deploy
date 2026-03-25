@@ -20,7 +20,7 @@ export default function TestimonialsSection() {
                 Discover your next career opportunity with our AI-powered job matching. 
                 Find roles that align with your skills, values, and career goals.
               </p>
-              <Link href="/candidates" className="text-[#1e40af] font-medium flex items-center gap-2 hover:underline">
+              <Link href="/candidates" className="text-primary font-medium flex items-center gap-2 hover:underline">
                 Learn more <ArrowRight className="w-4 h-4" />
               </Link>
             </CardContent>
@@ -39,7 +39,7 @@ export default function TestimonialsSection() {
                 Find the perfect talent for your team with our intelligent matching system. 
                 Streamline your hiring process and connect with top candidates faster.
               </p>
-              <Link href="/recruiters" className="text-[#1e40af] font-medium flex items-center gap-2 hover:underline">
+              <Link href="/recruiters" className="text-primary font-medium flex items-center gap-2 hover:underline">
                 Learn more <ArrowRight className="w-4 h-4" />
               </Link>
             </CardContent>

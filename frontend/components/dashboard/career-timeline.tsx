@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { TrendingUp, Plus, Save, Trash2, Pencil, X, GraduationCap } from "lucide-react"
+import { TrendingUp, Plus, Save, Trash2, Pencil, X, GraduationCap, Briefcase } from "lucide-react"
 import type { CandidateWorkExperience, CandidateEducation } from "@/types/candidate"
 
 const MONTH_OPTIONS = [
@@ -19,7 +19,7 @@ const CURRENT_YEAR = new Date().getFullYear()
 const YEAR_OPTIONS = Array.from({ length: 50 }, (_, index) => `${CURRENT_YEAR - index}`)
 
 /* Fixed colors for timeline item types */
-const JOB_COLOR = "#1e40af"       // Blue for jobs
+const JOB_COLOR = "var(--primary)"       // Brand blue for jobs
 const EDUCATION_COLOR = "#8b5cf6"  // Purple for education
 
 type TimelineEntry = {
@@ -186,9 +186,7 @@ export default function CareerTimeline({
                         {entry.type === "education" ? (
                           <GraduationCap className="w-3 h-3" style={{ color }} />
                         ) : (
-                          <svg className="w-3 h-3" style={{ color }} fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm3 1h2v2H7V5zm4 0h2v2h-2V5zM7 9h2v2H7V9zm4 0h2v2h-2V9zm-4 4h2v2H7v-2zm4 0h2v2h-2v-2z" />
-                          </svg>
+                          <Briefcase className="w-3 h-3" style={{ color }} />
                         )}
                       </div>
                       <div className="flex flex-col">

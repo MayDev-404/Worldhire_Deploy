@@ -10,7 +10,7 @@ export default function CTASection() {
           Join thousands of companies and candidates who have found success with WorldHire.
         </p>
         <div className="flex gap-4 justify-center">
-          <Button className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white" size="lg" asChild>
+          <Button size="lg" asChild>
             <Link href="/signup">Sign Up Now</Link>
           </Button>
           <Button variant="outline" className="border-white text-white hover:bg-white hover:text-black" size="lg" asChild>

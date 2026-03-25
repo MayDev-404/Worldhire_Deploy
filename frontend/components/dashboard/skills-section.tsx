@@ -75,7 +75,7 @@ export default function SkillsSection({ skills, isSaving = false, onSave }: Skil
                 topSkills.map((skill) => (
                   <span
                     key={skill}
-                    className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-[#1e40af] to-[#6366f1] text-white shadow-sm"
+                    className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-primary to-[#6366f1] text-white shadow-sm"
                   >
                     {skill}
                   </span>

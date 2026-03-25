@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
-import os
 from .api import routes
 from .api import auth_routes
 from .middleware.logging import RequestLoggingMiddleware
@@ -19,15 +18,12 @@ app = FastAPI(
 
 app.add_middleware(RequestLoggingMiddleware)
 
-# CORS Configuration - Allow frontend to call backend
-# Get allowed origins from environment variable or default to localhost
-allowed_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
-allowed_origins = [origin.strip() for origin in allowed_origins]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
-    allow_credentials=True,
+    # Railway deployment: allow all origins temporarily.
+    # Tighten this by setting a specific allowlist later.
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )

@@ -48,7 +48,7 @@ export default function EducationCard({
     <Card className="rounded-2xl border border-gray-100 shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <CardTitle className="text-lg font-bold flex items-center gap-2">
-          <GraduationCap className="w-5 h-5 text-[#1e40af]" />
+          <GraduationCap className="w-5 h-5 text-primary" />
           Education
         </CardTitle>
         <Button

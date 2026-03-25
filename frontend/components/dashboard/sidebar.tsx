@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { SiteLogo } from "@/components/brand/site-logo"
 import { usePathname } from "next/navigation"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
@@ -28,14 +29,34 @@ type SidebarProps = {
   candidate?: Candidate
   initials?: string
   onStatusChange?: (status: string) => void
+  isMobileOpen?: boolean
+  onCloseMobile?: () => void
 }
 
-export default function Sidebar({ candidate, initials = "CU", onStatusChange }: SidebarProps) {
+export default function Sidebar({
+  candidate,
+  initials = "CU",
+  onStatusChange,
+  isMobileOpen = false,
+  onCloseMobile,
+}: SidebarProps) {
   const pathname = usePathname()
   const status = candidate?.actively_seeking_toggle || "Active"
 
   return (
-    <aside className="w-[260px] min-w-[260px] bg-white border-r border-gray-100 h-screen sticky top-0 flex flex-col">
+    <>
+      <div
+        className={`fixed inset-0 z-40 bg-black/30 transition-opacity duration-200 lg:hidden ${
+          isMobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={onCloseMobile}
+        aria-hidden="true"
+      />
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-[260px] min-w-[260px] bg-white border-r border-gray-100 h-screen flex flex-col transform transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
+          isMobileOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
       {/* User Profile Card */}
       <div className="p-5 border-b border-gray-100">
         <div className="flex items-center gap-3 mb-5">
@@ -43,7 +64,7 @@ export default function Sidebar({ candidate, initials = "CU", onStatusChange }: 
             {candidate?.photograph_url ? (
               <img src={candidate.photograph_url} alt={candidate.name} className="h-full w-full object-cover" />
             ) : (
-              <AvatarFallback className="bg-gradient-to-br from-[#1e40af] to-[#6366f1] text-white text-sm font-semibold">
+              <AvatarFallback className="bg-gradient-to-br from-primary to-[#6366f1] text-white text-sm font-semibold">
                 {initials}
               </AvatarFallback>
             )}
@@ -96,9 +117,10 @@ export default function Sidebar({ candidate, initials = "CU", onStatusChange }: 
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  onClick={onCloseMobile}
                   className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all ${
                     isActive
-                      ? "bg-[#1e40af] text-white font-semibold shadow-sm"
+                    ? "bg-primary text-white font-semibold shadow-sm"
                       : "text-gray-600 hover:bg-gray-50 font-medium"
                   }`}
                 >
@@ -113,10 +135,9 @@ export default function Sidebar({ candidate, initials = "CU", onStatusChange }: 
 
       {/* Logo at bottom */}
       <div className="p-5 border-t border-gray-100">
-        <Link href="/" className="text-xl font-bold text-[#1e40af]">
-          worldhire
-        </Link>
+        <SiteLogo imgClassName="h-8 w-auto max-w-[180px]" />
       </div>
-    </aside>
+      </aside>
+    </>
   )
 }

@@ -10,6 +10,8 @@ This folder contains a FastAPI-based backend migrated from the Next.js API route
 
 ## Quick Start
 
+**Python:** Use **3.11, 3.12, or 3.13** if possible. **3.14** is often missing prebuilt wheels for some packages; if `pip install` fails while building `pydantic-core`, install [Python 3.12](https://www.python.org/downloads/) and create the venv with it, e.g. `py -3.12 -m venv .venv` (Windows).
+
 From repository root:
 
 ```bash
@@ -17,7 +19,7 @@ cd backend
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+python -m uvicorn app.main:app --reload --port 8000
 ```
 
 ## Environment Variables

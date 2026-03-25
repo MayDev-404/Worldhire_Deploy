@@ -18,9 +18,7 @@ export default function FeaturesSection() {
                 connected to top talent.
               </p>
               <div className="flex gap-4">
-                <Button className="bg-[#1e40af] hover:bg-[#1e3a8a]">
-                  Start Hiring
-                </Button>
+                <Button>Start Hiring</Button>
                 <Button variant="outline">Book a demo</Button>
               </div>
             </div>
