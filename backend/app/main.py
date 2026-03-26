@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
+import os
 from .api import routes
 from .api import auth_routes
 from .middleware.logging import RequestLoggingMiddleware
@@ -16,17 +17,24 @@ app = FastAPI(
     version="1.0.0"
 )
 
-app.add_middleware(RequestLoggingMiddleware)
-
 app.add_middleware(
     CORSMiddleware,
-    # Railway deployment: allow all origins temporarily.
-    # Tighten this by setting a specific allowlist later.
-    allow_origins=["https://worldhire-deploy.vercel.app/"],
+    # Production CORS: include the full Vercel URL (https) for the frontend.
+    # Configure via env in Railway: FRONTEND_URL or CORS_ORIGINS (comma-separated).
+    allow_origins=[
+        origin.rstrip("/")
+        for origin in (
+            os.getenv("CORS_ORIGINS")
+            or os.getenv("FRONTEND_URL", "https://worldhire-deploy.vercel.app")
+        ).split(",")
+        if origin.strip()
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.add_middleware(RequestLoggingMiddleware)
 
 app.add_middleware(JWTAuthMiddleware)
 

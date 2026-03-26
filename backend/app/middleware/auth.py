@@ -20,6 +20,8 @@ PUBLIC_PATHS: List[Tuple[str, str]] = [
     ("POST", "/api/auth/sign-up"),
     ("POST", "/api/auth/sign-in"),
     ("POST", "/api/auth/refresh"),
+    ("POST", "/api/auth/verify-token"),
+    ("POST", "/api/auth/logout"),
 ]
 
 
@@ -40,6 +42,10 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
     """Middleware that enforces a valid JWT on every non-public request."""
 
     async def dispatch(self, request: Request, call_next):
+        # Always allow CORS preflight requests.
+        if request.method == "OPTIONS":
+            return await call_next(request)
+
         method = request.method
         path = request.url.path
 
