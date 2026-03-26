@@ -22,9 +22,9 @@ app.add_middleware(
     CORSMiddleware,
     # Railway deployment: allow all origins temporarily.
     # Tighten this by setting a specific allowlist later.
-    allow_origins=["worldhire-deploy.vercel.app"],
-    allow_credentials=False,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_origins=["https://worldhire-deploy.vercel.app/"],
+    allow_credentials=True,
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
