@@ -29,25 +29,23 @@ export function StepOne({ formData, updateFormData, missingFields }: StepOneProp
     const file = e.target.files?.[0] || null
     updateFormData({ [field]: file })
 
-    // If CV is uploaded, parse and auto-fill using Gemma3 via Hugging Face
+    // If CV is uploaded, parse and auto-fill using Groq (LLaMA 3 70B)
     if (field === "cv" && file) {
       setIsParsingCV(true)
       try {
         const { apiClient } = await import("@/lib/api-client")
         const response = await apiClient.parseCV(file)
 
-        // Auto-fill form fields with extracted data
-        const { data } = response
+        // Auto-fill form fields with extracted data (only non-empty values)
+        const data = response.mapped_candidate_data || {}
         const updates: Partial<FormData> = {}
         if (data.name) updates.name = data.name
         if (data.email) updates.email = data.email
-        if (data.phone) updates.mobileNumber = data.phone
-        if (data.location) updates.currentLocation = data.location
-        if (data.nationality) updates.nationality = data.nationality
+        if (data.mobileNumber) updates.mobileNumber = data.mobileNumber
+        if (data.currentLocation) updates.currentLocation = data.currentLocation
         if (data.skills) updates.skills = data.skills
-        if (data.experience) updates.experience = data.experience
         if (data.linkedinProfile) updates.linkedinProfile = data.linkedinProfile
-        if (data.preferredRole) updates.preferredRole = data.preferredRole
+        if (data.portfolio) updates.portfolio = data.portfolio
         
         // Handle structured work experiences
         if (data.workExperiences && Array.isArray(data.workExperiences) && data.workExperiences.length > 0) {
@@ -70,6 +68,28 @@ export function StepOne({ formData, updateFormData, missingFields }: StepOneProp
 
   return (
     <div className="space-y-6">
+      {/* Full-screen loading overlay during CV parsing */}
+      {isParsingCV && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl p-10 flex flex-col items-center gap-5 max-w-sm mx-4">
+            <div className="relative">
+              <div className="w-16 h-16 rounded-full border-4 border-primary/20 flex items-center justify-center">
+                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+              </div>
+            </div>
+            <div className="text-center">
+              <h3 className="text-lg font-semibold text-gray-900">Analyzing your CV</h3>
+              <p className="text-sm text-gray-500 mt-1">
+                Extracting your details with AI&hellip; This may take a few seconds.
+              </p>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
+              <div className="h-full bg-primary rounded-full animate-pulse w-2/3" />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* CV Upload */}
       <div className="space-y-2">
         <Label htmlFor="cv" className="text-base font-semibold">
@@ -85,12 +105,6 @@ export function StepOne({ formData, updateFormData, missingFields }: StepOneProp
             disabled={isParsingCV}
           />
           {formData.cv && <p className="text-sm text-muted-foreground mt-2">Selected: {formData.cv.name}</p>}
-          {isParsingCV && (
-            <div className="flex items-center gap-2 mt-2 text-sm text-primary">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Analyzing your CV with AI and filling form fields...</span>
-            </div>
-          )}
         </div>
         <p className="text-sm text-muted-foreground">
           Accepted formats: PDF, DOC, DOCX (Max 5MB) - Fields will be auto-filled from your CV using AI

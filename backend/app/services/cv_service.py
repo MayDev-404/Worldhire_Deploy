@@ -1,16 +1,26 @@
+import io
+import json
+import logging
 from typing import Optional, Any, Dict
 from fastapi import UploadFile
 from PyPDF2 import PdfReader
-import io
-import os
-import json
-import httpx
 
+from ..infrastructure.groq_client import GroqClient
+from ..infrastructure.storage_service import StorageService
+from .form_mapper import FormMapper
+
+logger = logging.getLogger("backend")
 
 class CVService:
+    def __init__(self):
+        self.groq_client = GroqClient()
+        self.storage_service = StorageService()
+        self.form_mapper = FormMapper()
+
     async def _extract_text_from_file(self, file: UploadFile) -> str:
         """Extract raw text from uploaded file."""
         contents = await file.read()
+        await file.seek(0)
         
         # Try PDF
         if file.content_type == 'application/pdf' or (file.filename and file.filename.lower().endswith('.pdf')):
@@ -41,155 +51,101 @@ class CVService:
         except Exception:
             raise RuntimeError("Unsupported file type or binary content")
 
-    async def _extract_cv_data_with_ai(self, cv_text: str) -> Dict[str, Any]:
-        """Extract structured data from CV text using HuggingFace AI."""
-        hf_token = os.getenv('HUGGINGFACE_API_KEY')
+    async def _extract_cv_data_with_groq(self, cv_text: str) -> Dict[str, Any]:
+        """Extract structured data from CV text using Groq LLaMA 3."""
         
-        if not hf_token:
-            # Return empty structure if no API key
-            return {}
+        system_prompt = (
+            "You are an expert CV/Resume parser. Your task is to extract exact information "
+            "from the provided CV text. You must output ONLY valid JSON, with no markdown formatting, "
+            "no explanations, and no hallucinated missing fields. If data is not found, use null or empty array."
+        )
         
-        model = os.getenv('HUGGINGFACE_MODEL', 'google/gemma-2b-it')
-        
-        prompt = f"""Extract the following information from this CV/resume text and return it as a JSON object. Only include fields that are present in the CV.
+        prompt = f"""Extract the following structured information from this CV text:
 
-CV Text:
-{cv_text[:3000]}{'... (truncated)' if len(cv_text) > 3000 else ''}
+{cv_text[:10000]}{'... (truncated)' if len(cv_text) > 10000 else ''}
 
-Extract and return a JSON object with these fields (only include fields that exist):
+Return a JSON object strictly following this structure:
 {{
-  "name": "full name",
-  "email": "email address",
-  "phone": "phone number",
-  "location": "current location/city",
-  "nationality": "nationality",
-  "skills": "comma-separated list of skills",
-  "experience": "years of experience or experience summary",
-  "education": "education summary",
-  "workHistory": "brief work history summary",
-  "linkedinProfile": "LinkedIn URL if present",
-  "currentRole": "current job title",
-  "preferredRole": "preferred role if mentioned",
-  "workExperiences": [
+  "full_name": "Applicant's full name",
+  "email": "Email address",
+  "phone": "Phone number",
+  "linkedin": "LinkedIn profile URL",
+  "github": "GitHub profile URL",
+  "portfolio": "Portfolio URL or personal website",
+  "skills": ["Skill 1", "Skill 2"],
+  "experience": [
     {{
-      "companyName": "company name",
-      "role": "job title",
-      "startMonth": "month name",
-      "startYear": "year",
-      "endMonth": "month name or empty if current",
-      "endYear": "year or empty if current",
-      "description": "job description",
-      "isCurrent": true or false
+      "company": "Company Name",
+      "role": "Job Title",
+      "start_date": "MM YYYY or YYYY",
+      "end_date": "MM YYYY, YYYY, or Present/Current/null if current",
+      "description": "Brief description of responsibilities and achievements"
     }}
   ],
-  "educations": [
+  "education": [
     {{
-      "degree": "degree name",
-      "institute": "institution name",
-      "startYear": "year",
-      "endYear": "year"
+      "institution": "University/Institution name",
+      "degree": "Degree name",
+      "field": "Field of study",
+      "start_year": "YYYY",
+      "end_year": "YYYY or null if current"
     }}
-  ]
-}}
-
-Return ONLY valid JSON, no additional text or markdown formatting."""
+  ],
+  "projects": [
+    {{
+      "name": "Project name",
+      "description": "Project description",
+      "tech_stack": "Technologies used (in a single string)"
+    }}
+  ],
+  "certifications": "String of certifications if any",
+  "location": "City, Country, or current location"
+}}"""
 
         try:
-            async with httpx.AsyncClient(timeout=30.0) as client:
-                response = await client.post(
-                    f"https://api-inference.huggingface.co/models/{model}",
-                    headers={"Authorization": f"Bearer {hf_token}"},
-                    json={
-                        "inputs": prompt,
-                        "parameters": {
-                            "max_new_tokens": 2000,
-                            "temperature": 0.3,
-                            "return_full_text": False,
-                        }
-                    }
-                )
-                response.raise_for_status()
-                result = response.json()
+            json_response = await self.groq_client.generate_json(prompt, system_prompt)
+            # Remove any potential markdown wrappers if the model ignores the instruction
+            json_response = json_response.strip()
+            if json_response.startswith('```json'):
+                json_response = json_response[7:]
+            if json_response.endswith('```'):
+                json_response = json_response[:-3]
                 
-                # Extract generated text
-                generated_text = ""
-                if isinstance(result, list) and len(result) > 0:
-                    generated_text = result[0].get('generated_text', '')
-                elif isinstance(result, dict):
-                    generated_text = result.get('generated_text', '')
-                
-                # Clean up response text
-                generated_text = generated_text.strip()
-                generated_text = generated_text.replace('```json\n', '').replace('```\n', '').replace('```', '').strip()
-                
-                # Try to find JSON object in the response
-                json_match = None
-                if '{' in generated_text:
-                    start = generated_text.find('{')
-                    brace_count = 0
-                    end = start
-                    for i in range(start, len(generated_text)):
-                        if generated_text[i] == '{':
-                            brace_count += 1
-                        elif generated_text[i] == '}':
-                            brace_count -= 1
-                            if brace_count == 0:
-                                end = i + 1
-                                break
-                    if end > start:
-                        json_match = generated_text[start:end]
-                
-                if json_match:
-                    extracted_data = json.loads(json_match)
-                    # Clean and validate
-                    return {
-                        "name": extracted_data.get("name", "").strip() if extracted_data.get("name") else None,
-                        "email": extracted_data.get("email", "").strip() if extracted_data.get("email") else None,
-                        "phone": extracted_data.get("phone", "").strip() if extracted_data.get("phone") else None,
-                        "location": extracted_data.get("location", "").strip() if extracted_data.get("location") else None,
-                        "nationality": extracted_data.get("nationality", "").strip() if extracted_data.get("nationality") else None,
-                        "skills": extracted_data.get("skills", "").strip() if extracted_data.get("skills") else None,
-                        "experience": extracted_data.get("experience", "").strip() if extracted_data.get("experience") else None,
-                        "education": extracted_data.get("education", "").strip() if extracted_data.get("education") else None,
-                        "workHistory": extracted_data.get("workHistory", "").strip() if extracted_data.get("workHistory") else None,
-                        "linkedinProfile": extracted_data.get("linkedinProfile", "").strip() if extracted_data.get("linkedinProfile") else None,
-                        "currentRole": extracted_data.get("currentRole", "").strip() if extracted_data.get("currentRole") else None,
-                        "preferredRole": extracted_data.get("preferredRole", "").strip() if extracted_data.get("preferredRole") else None,
-                        "workExperiences": [
-                            exp for exp in extracted_data.get("workExperiences", [])
-                            if exp.get("companyName") and exp.get("role") and exp.get("startYear")
-                        ] if extracted_data.get("workExperiences") else None,
-                        "educations": [
-                            edu for edu in extracted_data.get("educations", [])
-                            if edu.get("degree") and edu.get("institute") and edu.get("startYear") and edu.get("endYear")
-                        ] if extracted_data.get("educations") else None,
-                    }
-                else:
-                    return {}
+            return json.loads(json_response.strip())
         except Exception as e:
-            # Log error but don't fail - return empty structure
-            import logging
-            logger = logging.getLogger("backend")
-            logger.warning(f"AI extraction failed: {e}")
-            return {}
+            logger.error(f"Groq API extraction failed: {e}")
+            raise RuntimeError(f"Failed to extract CV data: {e}")
 
-    async def parse_cv(self, file: Optional[UploadFile] = None, text: Optional[str] = None) -> Dict[str, Any]:
-        """Parse CV file or text and extract structured data using AI."""
-        if text:
-            # If raw text provided, extract with AI
-            extracted = await self._extract_cv_data_with_ai(text)
-            return extracted
+    async def parse_cv(self, file: Optional[UploadFile] = None, text: Optional[str] = None, candidate_id: Optional[str] = None) -> Dict[str, Any]:
+        """Parse CV file or text, extract structured data using Groq, and map to application schema."""
+        extracted_text = ""
+        cv_url = None
 
-        if not file:
+        if file:
+            extracted_text = await self._extract_text_from_file(file)
+            if not extracted_text or not extracted_text.strip():
+                raise ValueError("Could not extract text from the file. Please ensure the file is readable.")
+                
+            # Upload file to storage and record metadata
+            try:
+                cv_url = await self.storage_service.upload_cv(file, candidate_id)
+            except Exception as e:
+                logger.warning(f"File upload to Supabase failed during parsing: {e}")
+                
+        elif text:
+            extracted_text = text
+        else:
             raise ValueError("No file or text provided")
 
-        # Extract text from file
-        extracted_text = await self._extract_text_from_file(file)
+        # Extract structured data using Groq
+        raw_cv_data = await self._extract_cv_data_with_groq(extracted_text)
         
-        if not extracted_text or not extracted_text.strip():
-            raise ValueError("Could not extract text from the file. Please ensure the file is readable.")
-
-        # Extract structured data using AI
-        extracted_data = await self._extract_cv_data_with_ai(extracted_text)
+        # Map raw JSON to frontend candidate form schema
+        mapped_data = self.form_mapper.map_to_form(raw_cv_data)
         
-        return extracted_data
+        return {
+            "mapped_candidate_data": mapped_data,
+            "raw_extraction": raw_cv_data,
+            "cv_url": cv_url,
+            "success": True
+        }

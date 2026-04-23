@@ -22,6 +22,10 @@ PUBLIC_PATHS: List[Tuple[str, str]] = [
     ("POST", "/api/auth/refresh"),
     ("POST", "/api/auth/verify-token"),
     ("POST", "/api/auth/logout"),
+    # CV parsing runs before signup — must be publicly accessible
+    ("POST", "/api/parse-cv"),
+    # Application submission handles auth internally via the Authorization header
+    ("POST", "/api/submit-application"),
 ]
 
 

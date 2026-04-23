@@ -11,7 +11,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { 
   User, GraduationCap, Briefcase, FileText, 
-  ChevronLeft, ChevronRight, Check, Upload, Eye, EyeOff, Plus, Trash2
+  ChevronLeft, ChevronRight, Check, Upload, Eye, EyeOff, Plus, Trash2, Loader2
 } from "lucide-react"
 import { apiClient } from "@/lib/api-client"
 import { useToast } from "@/hooks/use-toast"
@@ -505,12 +505,79 @@ export default function CandidateSignUpForm() {
 
 // Step 1: Basic Info
 function Step1BasicInfo({ formData, updateFormData }: any) {
+  const [isParsingCV, setIsParsingCV] = useState(false)
   const selectedCountryCode = getSelectedCountryCode(formData.mobileNumber)
   const phoneNumber = getPhoneNumberWithoutCountryCode(formData.mobileNumber)
   const currentSalaryRanges = getSalaryRangesForCurrency(formData.currentSalaryCurrency)
 
+  const handleCVUpload = async (file: File) => {
+    updateFormData("cv", file)
+    setIsParsingCV(true)
+    try {
+      const response = await apiClient.parseCV(file)
+      const data = response.mapped_candidate_data || {}
+
+      // Auto-fill only fields that are currently empty
+      if (data.name && !formData.fullName) updateFormData("fullName", data.name)
+      if (data.email && !formData.email) updateFormData("email", data.email)
+      if (data.mobileNumber && !formData.mobileNumber) updateFormData("mobileNumber", data.mobileNumber)
+      if (data.currentLocation && !formData.currentLocation) updateFormData("currentLocation", data.currentLocation)
+      if (data.linkedinProfile && !formData.linkedinProfile) updateFormData("linkedinProfile", data.linkedinProfile)
+      if (data.portfolio && !formData.portfolio) updateFormData("portfolio", data.portfolio)
+      if (data.skills && !formData.skills) updateFormData("skills", data.skills)
+
+      // Auto-fill work experiences if user hasn't typed anything
+      if (
+        data.workExperiences &&
+        Array.isArray(data.workExperiences) &&
+        data.workExperiences.length > 0 &&
+        formData.workExperiences.length === 1 &&
+        !formData.workExperiences[0].companyName
+      ) {
+        updateFormData("workExperiences", data.workExperiences)
+      }
+
+      // Auto-fill educations
+      if (
+        data.educations &&
+        Array.isArray(data.educations) &&
+        data.educations.length > 0 &&
+        formData.educations.length === 1 &&
+        !formData.educations[0].degree
+      ) {
+        updateFormData("educations", data.educations)
+      }
+    } catch (error) {
+      console.error("CV parsing failed:", error)
+    } finally {
+      setIsParsingCV(false)
+    }
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {/* Full-screen loading overlay during CV parsing */}
+      {isParsingCV && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl p-10 flex flex-col items-center gap-5 max-w-sm mx-4">
+            <div className="relative">
+              <div className="w-16 h-16 rounded-full border-4 border-primary/20 flex items-center justify-center">
+                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+              </div>
+            </div>
+            <div className="text-center">
+              <h3 className="text-lg font-semibold text-gray-900">Analyzing your CV</h3>
+              <p className="text-sm text-gray-500 mt-1">
+                Extracting your details with AI&hellip; This may take a few seconds.
+              </p>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
+              <div className="h-full bg-primary rounded-full animate-pulse w-2/3" />
+            </div>
+          </div>
+        </div>
+      )}
+
       <div>
         <h2 className="text-2xl font-bold mb-2">Step 1: Upload CV & Basic Info</h2>
         <p className="text-gray-600">Start by uploading your CV and providing basic information</p>
@@ -525,15 +592,16 @@ function Step1BasicInfo({ formData, updateFormData }: any) {
               accept=".pdf,.docx"
               onChange={(e) => {
                 const file = e.target.files?.[0]
-                if (file) updateFormData("cv", file)
+                if (file) handleCVUpload(file)
               }}
               className="hidden"
               id="cv-upload"
+              disabled={isParsingCV}
             />
             <Button asChild variant="outline" className="cursor-pointer">
               <label htmlFor="cv-upload">
                 <Upload className="w-4 h-4 mr-2" />
-                Browse...
+                {isParsingCV ? "Parsing..." : "Browse..."}
               </label>
             </Button>
             <Input
@@ -542,7 +610,9 @@ function Step1BasicInfo({ formData, updateFormData }: any) {
               className="flex-1"
             />
           </div>
-          <p className="text-sm text-gray-500 mt-1">Accepted formats: PDF, DOCX. (Max 5MB)</p>
+          <p className="text-sm text-gray-500 mt-1">
+            Accepted formats: PDF, DOCX (Max 5MB) — Fields will be auto-filled from your CV using AI
+          </p>
         </div>
 
         <div>

@@ -174,15 +174,19 @@ async def submit_application(
 
 
 @router.post("/parse-cv")
-async def parse_cv(file: Optional[UploadFile] = File(None), text: Optional[str] = Form(None)):
+async def parse_cv(
+    file: Optional[UploadFile] = File(None), 
+    text: Optional[str] = Form(None),
+    candidate_id: Optional[str] = Form(None)
+):
     """Parses uploaded CV file or raw text and returns extracted data."""
     try:
         if not file and not text:
             return JSONResponse({"error": "No file or text provided"}, status_code=400)
         
         svc = CVService()
-        parsed = await svc.parse_cv(file=file, text=text)
-        return JSONResponse({"data": parsed})
+        parsed = await svc.parse_cv(file=file, text=text, candidate_id=candidate_id)
+        return JSONResponse(parsed)
     except ValueError as e:
         return JSONResponse({"error": str(e)}, status_code=400)
     except Exception as e:

@@ -21,11 +21,15 @@ app.add_middleware(
     CORSMiddleware,
     # Production CORS: include the full Vercel URL (https) for the frontend.
     # Configure via env in Railway: FRONTEND_URL or CORS_ORIGINS (comma-separated).
+    # Local dev: http://localhost:3000 is included by default.
     allow_origins=[
-        origin.rstrip("/")
+        origin.strip().rstrip("/")
         for origin in (
             os.getenv("CORS_ORIGINS")
-            or os.getenv("FRONTEND_URL", "https://worldhire-deploy.vercel.app")
+            or os.getenv(
+                "FRONTEND_URL",
+                "https://worldhire-deploy.vercel.app,http://localhost:3000,http://127.0.0.1:3000",
+            )
         ).split(",")
         if origin.strip()
     ],

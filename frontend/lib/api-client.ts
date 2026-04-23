@@ -121,13 +121,23 @@ export const apiClient = {
   },
 
   /**
-   * Parse CV file and extract structured data
+   * Parse CV file and extract structured data via Groq (LLaMA 3 70B)
    */
-  async parseCV(file: File): Promise<{ data: any }> {
+  async parseCV(file: File): Promise<{
+    mapped_candidate_data: Record<string, any>
+    raw_extraction: Record<string, any>
+    cv_url: string | null
+    success: boolean
+  }> {
     const formData = new FormData()
     formData.append('file', file)
     
-    return this.request<{ data: any }>('/api/parse-cv', {
+    return this.request<{
+      mapped_candidate_data: Record<string, any>
+      raw_extraction: Record<string, any>
+      cv_url: string | null
+      success: boolean
+    }>('/api/parse-cv', {
       method: 'POST',
       body: formData,
     })

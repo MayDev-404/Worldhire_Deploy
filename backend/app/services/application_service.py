@@ -1,8 +1,11 @@
 from typing import Optional, Any, Dict, List, Tuple
 from ..infrastructure.supabase_client import get_supabase_client
+from ..infrastructure.storage_service import StorageService
 from fastapi import UploadFile
 import json
-import time
+import logging
+
+logger = logging.getLogger("backend")
 
 
 class ApplicationService:
@@ -110,44 +113,20 @@ class ApplicationService:
 
         cv_url = None
         photo_url = None
+        storage = StorageService()
 
-        # Upload CV
+        # Upload CV via StorageService
         if cv_file:
-            contents = await cv_file.read()
-            filename = f"{int(time.time())}-{cv_file.filename}"
             try:
-                res = supabase.storage.from_('candidate-cvs').upload(filename, contents)
-                if res:
-                    public = supabase.storage.from_('candidate-cvs').get_public_url(filename)
-                    if isinstance(public, dict):
-                        cv_url = public.get('publicURL') or public.get('public_url')
-                    elif hasattr(public, 'get'):
-                        cv_url = public.get('publicURL') or public.get('public_url')
-                    else:
-                        # Try direct access
-                        cv_url = str(public) if public else None
+                cv_url = await storage.upload_cv(cv_file)
             except Exception as e:
-                import logging
-                logger = logging.getLogger("backend")
                 logger.error(f"CV upload error: {e}")
 
-        # Upload photo
+        # Upload photo via StorageService
         if photo_file:
-            contents = await photo_file.read()
-            filename = f"{int(time.time())}-{photo_file.filename}"
             try:
-                res = supabase.storage.from_('candidate-photos').upload(filename, contents)
-                if res:
-                    public = supabase.storage.from_('candidate-photos').get_public_url(filename)
-                    if isinstance(public, dict):
-                        photo_url = public.get('publicURL') or public.get('public_url')
-                    elif hasattr(public, 'get'):
-                        photo_url = public.get('publicURL') or public.get('public_url')
-                    else:
-                        photo_url = str(public) if public else None
+                photo_url = await storage.upload_photo(photo_file)
             except Exception as e:
-                import logging
-                logger = logging.getLogger("backend")
                 logger.error(f"Photo upload error: {e}")
 
         # Prepare candidate data with all fields
@@ -233,8 +212,6 @@ class ApplicationService:
                         if records:
                             supabase.table('work_experiences').insert(records).execute()
                 except Exception as e:
-                    import logging
-                    logger = logging.getLogger("backend")
                     logger.warning(f"Work experiences insert error: {e}")
 
             # Insert educations
@@ -256,14 +233,10 @@ class ApplicationService:
                         if records:
                             supabase.table('educations').insert(records).execute()
                 except Exception as e:
-                    import logging
-                    logger = logging.getLogger("backend")
                     logger.warning(f"Educations insert error: {e}")
 
             return inserted
         except Exception as e:
-            import logging
-            logger = logging.getLogger("backend")
             logger.error(f"Database insert error: {e}")
             
             # Handle specific error cases
@@ -288,8 +261,6 @@ class ApplicationService:
                 return data[0] if isinstance(data, list) and len(data) > 0 else None
             return None
         except Exception as e:
-            import logging
-            logger = logging.getLogger("backend")
             logger.error(f"Error fetching candidate: {e}")
             return None
 
@@ -311,8 +282,6 @@ class ApplicationService:
 
             return candidate
         except Exception as e:
-            import logging
-            logger = logging.getLogger("backend")
             logger.error(f"Error fetching candidate by user_id: {e}")
             return None
 
